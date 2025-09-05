@@ -27,7 +27,7 @@ return new class extends Migration
             $table->unsignedBigInteger('size_in_bytes')->nullable();
             $table->string('mime')->nullable();
             $table->boolean('is_public')->default(false);
-
+            
             $table->timestamps();
         });
     }

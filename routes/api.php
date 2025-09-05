@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\CurrentUserController;
+use App\Http\Controllers\Api\MediaController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\ConfirmablePasswordController;
 use App\Http\Controllers\Auth\EmailVerificationNotificationController;
@@ -38,4 +39,6 @@ Route::middleware(['auth:sanctum'])->group(function () {
         ->middleware('throttle:6,1');
         
     Route::post('/confirm-password', [ConfirmablePasswordController::class, 'store']);
+
+    Route::get('media/{media}/display', [MediaController::class, 'display'])->name('api.media.display');
 });
