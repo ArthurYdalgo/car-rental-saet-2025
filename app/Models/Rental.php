@@ -27,4 +27,17 @@ class Rental extends Model
             'canceled_at' => 'datetime',
         ];
     }
+
+    #region Relationships
+    public function paymentMethods(){
+        return $this->belongsToMany(PaymentMethod::class, 'payment_method_rental');
+    }
+
+    public function customer(){
+        return $this->belongsTo(Customer::class);
+    }
+
+    public function vehicle(){
+        return $this->belongsTo(Vehicle::class);
+    }
 }

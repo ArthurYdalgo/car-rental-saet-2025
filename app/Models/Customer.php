@@ -21,4 +21,14 @@ class Customer extends Model
             'birthday' => 'datetime'
         ];
     }
+    
+
+    #region Relationships
+    public function rentals(){
+        return $this->hasMany(Rental::class);
+    }
+
+    public function vehicles(){
+        return $this->belongsToMany(Vehicle::class, 'rentals');
+    } 
 }

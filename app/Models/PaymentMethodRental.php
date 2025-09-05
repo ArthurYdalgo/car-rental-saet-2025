@@ -17,4 +17,14 @@ class PaymentMethodRental extends Pivot
             'amount' => 'decimal:2',
         ];
     }
+
+    #region Relationships
+    public function rental()
+    {
+        return $this->belongsTo(Rental::class);
+    }
+
+    public function paymentMethod(){
+        return $this->belongsTo(PaymentMethod::class);
+    }
 }

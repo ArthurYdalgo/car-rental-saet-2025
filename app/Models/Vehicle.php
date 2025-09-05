@@ -30,4 +30,21 @@ class Vehicle extends Model
             'year' => 'integer',
         ];
     }
+
+    #region Relationships
+    public function brand(){
+        return $this->belongsTo(Brand::class);
+    }
+
+    public function color(){
+        return $this->belongsTo(Color::class); 
+    }
+
+    public function rentals(){
+        return $this->hasMany(Rental::class);
+    }
+
+    public function customers(){
+        return $this->belongsToMany(Customer::class, 'rentals');
+    }   
 }

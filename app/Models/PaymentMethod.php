@@ -10,4 +10,9 @@ class PaymentMethod extends Model
         'name',
         'tag'
     ];
+
+    #region Relationships
+    public function rentals(){
+        return $this->belongsToMany(Rental::class, 'payment_method_rental');
+    }
 }

@@ -10,4 +10,9 @@ class Color extends Model
         'name',
         'tag',
     ];
+
+    #region Relationships
+    public function vehicles(){
+        return $this->hasMany(Vehicle::class);
+    }
 }
