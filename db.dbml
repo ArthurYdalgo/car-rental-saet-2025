@@ -10,6 +10,23 @@ Table users {
   updated_at datetime
 }
 
+
+Table brands {
+  id integer [primary key]
+  name string 
+  tag string
+  created_at datetime
+  updated_at datetime
+}
+
+Table colors {
+  id integer
+  tag string
+  name string
+  created_at datetime
+  updated_at datetime
+}
+
 Table customers {
   id integer [primary key]
   name string
@@ -53,14 +70,6 @@ Table vehicles {
   updated_at datetime
 }
 
-Table colors {
-  id integer
-  tag string
-  name string
-  created_at datetime
-  updated_at datetime
-}
-
 Table payment_methods {
   id integer
   name string
@@ -69,13 +78,6 @@ Table payment_methods {
   updated_at datetime
 }
 
-Table payment_method_rental {
-  payment_method_id integer
-  rental_id integer
-  amount decimal
-  created_at datetime
-  updated_at datetime
-}
 
 Table rentals {
   id integer
@@ -88,10 +90,10 @@ Table rentals {
   ends_at datetime
 }
 
-Table brands {
-  id integer [primary key]
-  name string 
-  tag string
+Table payment_method_rental {
+  payment_method_id integer
+  rental_id integer
+  amount decimal
   created_at datetime
   updated_at datetime
 }
