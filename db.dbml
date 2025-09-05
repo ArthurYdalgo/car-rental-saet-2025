@@ -39,22 +39,6 @@ Table customers {
   updated_at datetime
 }
 
-Table addresses {
-  id integer
-  addressable_id integer
-  addressable_type string
-  is_default boolean
-  state string
-  city string
-  district string
-  street string
-  number string
-  complement string
-  zip_code string
-  created_at datetime
-  updated_at datetime
-}
-
 Table vehicles {
   id integer
   brand_id integer
