@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Media extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory;
 
     protected $fillable = [
         'uploader_id',
@@ -24,6 +24,11 @@ class Media extends Model
         'size_in_bytes',
         'mime',
         'is_public',
+    ];
+
+    protected $appends = [
+        'url',
+        'human_size'
     ];
 
     protected function casts(): array
@@ -44,21 +49,18 @@ class Media extends Model
         return $this->belongsTo(User::class, 'uploader_id');
     }
 
-    // Methods
+    #region Getters and Setters
     public function getUrlAttribute()
     {
-        if ($this->is_public) {
-            return $this->storage_url;
-        }
-
-        /**
-         * @todo Implement a way to generate a signed URL for private files
-         */
-        // return route('media.show', $this->id);
+        return route('api.media.display', $this->id);
     }
 
     public function getHumanSizeAttribute()
     {
         return humanFileSize($this->size_in_bytes);
+    }
+
+    public function getFullPathAttribute(){
+        return "{$this->relative_path}/{$this->name}.{$this->extension}";
     }
 }
