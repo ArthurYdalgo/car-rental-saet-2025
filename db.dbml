@@ -5,6 +5,7 @@ Table users {
   id integer [primary key]
   name string
   email string
+  password string
   created_at datetime
   updated_at datetime
 }
@@ -17,6 +18,22 @@ Table customers {
   cpf string
   license_number string
   license_issuing_state string
+  created_at datetime
+  updated_at datetime
+}
+
+Table addresses {
+  id integer
+  addressable_id integer
+  addressable_type string
+  is_default boolean
+  state string
+  city string
+  district string
+  street string
+  number string
+  complement string
+  zip_code string
   created_at datetime
   updated_at datetime
 }
