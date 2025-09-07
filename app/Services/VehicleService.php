@@ -12,7 +12,6 @@ class VehicleService
         'pickup',
         'truck',
         'van',
-        ''
     ];
 
     public function __construct(public ?Vehicle $customer = null) {}
