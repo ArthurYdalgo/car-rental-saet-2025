@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\Customer\StoreRequest;
 use App\Http\Requests\Api\Customer\UpdateRequest;
+use App\Http\Resources\CustomerResource;
 use App\Models\Customer;
 use App\Services\CustomerService;
 use Illuminate\Http\Request;
@@ -19,7 +20,7 @@ class CustomerController extends Controller
     {
         $customers = Customer::paginate(min($request->query('per_page', 15), 100));
 
-        return JsonResource::collection($customers);
+        return CustomerResource::collection($customers);
     }
 
     /**
@@ -31,7 +32,7 @@ class CustomerController extends Controller
 
         $customer = CustomerService::updateOrCreate($data);
 
-        return $customer;
+        return new CustomerResource($customer);
     }
 
     /**
@@ -39,7 +40,7 @@ class CustomerController extends Controller
      */
     public function show(Customer $customer)
     {
-        return $customer;
+        return new CustomerResource($customer);
     }
 
     /**

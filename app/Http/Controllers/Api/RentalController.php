@@ -1,0 +1,66 @@
+<?php
+
+namespace App\Http\Controllers\Api;
+
+use App\Http\Controllers\Controller;
+use App\Http\Requests\Api\Rental\StoreRequest;
+use App\Http\Requests\Api\Rental\UpdateRequest;
+use App\Http\Resources\RentalResource;
+use App\Models\Rental;
+use App\Services\RentalService;
+use Illuminate\Http\Request;
+
+class RentalController extends Controller
+{
+    /**
+     * Display a listing of the resource.
+     */
+    public function index(Request $request)
+    {
+        $rentals = Rental::paginate(min($request->query('per_page', 15), 100));
+
+        return RentalResource::collection($rentals);
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function store(StoreRequest $request)
+    {
+        $data = $request->validated();
+
+        $rental = RentalService::updateOrCreate($data);
+
+        return new RentalResource($rental);
+    }
+
+    /**
+     * Display the specified resource.
+     */
+    public function show(Rental $rental)
+    {
+        return new RentalResource($rental);
+    }
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(UpdateRequest $request, Rental $rental)
+    {
+        $data = $request->validated();
+
+        $rental = RentalService::updateOrCreate($data, $rental);
+
+        return new RentalResource($rental);
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(Rental $rental)
+    {
+        $rental->delete();
+
+        return response()->noContent();
+    }
+}

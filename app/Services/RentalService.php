@@ -29,7 +29,13 @@ class RentalService
             $rental = Rental::create($rental_data);
         }
 
-        
+        if(array_key_exists('payment_methods', $data)){
+            $payment_methods = collect($data['payment_methods'])->mapWithKeys(function($item){
+                [$item['id'] => ['amount' => $item['amount']]];
+            })->toArray();
+
+            $rental->paymentMethods()->sync($payment_methods);
+        }
 
         return $rental;
     }

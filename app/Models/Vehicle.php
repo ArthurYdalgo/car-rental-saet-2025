@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Services\VehicleService;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -47,4 +48,9 @@ class Vehicle extends Model
     public function customers(){
         return $this->belongsToMany(Customer::class, 'rentals');
     }   
+
+    #region Methods
+    public function vehicleService(){
+        return new VehicleService($this);
+    }
 }
