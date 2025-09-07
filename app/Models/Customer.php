@@ -23,7 +23,7 @@ class Customer extends Model
     protected function casts(): array
     {
         return [
-            'birthday' => 'datetime'
+            'birthday' => 'date'
         ];
     }
     
