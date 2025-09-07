@@ -15,8 +15,8 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('email')->unique();
-            $table->date('birthday')->nullable();
-            $table->string('cpf')->unique()->nullable();
+            $table->date('birthday');
+            $table->string('cpf')->unique();
             $table->string('license_number')->unique();
             $table->string('license_issuing_state')->index();
 
