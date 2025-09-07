@@ -27,7 +27,7 @@ class CustomerController extends Controller
      */
     public function store(StoreRequest $request)
     {
-        $data = $request->all();
+        $data = $request->validated();
 
         $customer = CustomerService::updateOrCreate($data);
 
@@ -47,7 +47,7 @@ class CustomerController extends Controller
      */
     public function update(UpdateRequest $request, Customer $customer)
     {
-        $data = $request->all();
+        $data = $request->validated();
 
         $customer = CustomerService::updateOrCreate($data, $customer);
 
