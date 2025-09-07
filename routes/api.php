@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\CurrentUserController;
+use App\Http\Controllers\Api\CustomerController;
 use App\Http\Controllers\Api\MediaController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\ConfirmablePasswordController;
@@ -40,5 +41,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
         
     Route::post('/confirm-password', [ConfirmablePasswordController::class, 'store']);
 
-    Route::get('media/{media}/display', [MediaController::class, 'display'])->name('api.media.display');
+    Route::get('media/{media}/display', [MediaController::class, 'display'])->name('media.display');
+
+    Route::apiResource('customers', CustomerController::class);
 });
