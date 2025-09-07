@@ -24,7 +24,7 @@ return new class extends Migration
             $table->string('name')->index();
             $table->integer('year');
             $table->integer('seats');
-            $table->decimal('trunk_capacity', 8, 2);
+            $table->decimal('trunk_capacity', 8, 2)->nullable();
             $table->decimal('price_per_day', 10, 2);
 
             $table->softDeletes();
