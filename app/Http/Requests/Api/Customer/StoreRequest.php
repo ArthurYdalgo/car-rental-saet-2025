@@ -22,7 +22,11 @@ class StoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email:rfc,dns', 'max:255', 'unique:customers,email'],
+            'cpf' => ['required', 'string', 'max:30', 'unique:customers,cpf'],
+            'license_number' => ['required', 'string', 'unique:customers,license_number'],
+            'license_issuing_state' => ['required', 'string', 'size:2'],
         ];
     }
 }
