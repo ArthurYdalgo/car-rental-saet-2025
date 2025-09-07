@@ -6,19 +6,11 @@ use Illuminate\Http\Request;
 
 class VehicleController extends Controller
 {
-    public function index(){
-        
-    }
+    public function index() {}
 
-    public function show(){
+    public function show() {}
 
-    }
+    public function edit() {}
 
-    public function edit(){
-
-    }
-
-    public function create(){
-
-    }
+    public function create() {}
 }
