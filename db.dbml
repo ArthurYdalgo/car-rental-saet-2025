@@ -23,6 +23,7 @@ Table colors {
   id integer
   tag string
   name string
+  hex string
   created_at datetime
   updated_at datetime
 }
