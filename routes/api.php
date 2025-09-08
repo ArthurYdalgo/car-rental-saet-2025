@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\CurrentUserController;
 use App\Http\Controllers\Api\CustomerController;
 use App\Http\Controllers\Api\MediaController;
+use App\Http\Controllers\Api\VehicleController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\ConfirmablePasswordController;
 use App\Http\Controllers\Auth\EmailVerificationNotificationController;
@@ -44,4 +45,5 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('media/{media}/display', [MediaController::class, 'display'])->name('media.display');
 
     Route::apiResource('customers', CustomerController::class);
+    Route::apiResource('vehicles', VehicleController::class);
 });
