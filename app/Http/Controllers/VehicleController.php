@@ -2,15 +2,41 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\VehicleResource;
+use App\Models\Color;
+use App\Models\Vehicle;
 use Illuminate\Http\Request;
 
 class VehicleController extends Controller
 {
-    public function index() {}
+    public function index()
+    {
+        $colors = Color::all();
 
-    public function show() {}
+        return nexus(props: compact('colors'));
+    }
 
-    public function edit() {}
+    public function show(Vehicle $vehicle)
+    {
+        return nexus(props: [
+            'vehicle' => new VehicleResource($vehicle),
+        ]);
+    }
 
-    public function create() {}
+    public function edit(Vehicle $vehicle)
+    {
+        $colors = Color::all();
+
+        return nexus(props: [
+            'vehicle' => new VehicleResource($vehicle),
+            'colors' => $colors,
+        ]);
+    }
+
+    public function create()
+    {
+        $colors = Color::all();
+
+        return nexus(props: compact('colors'));
+    }
 }

@@ -31,28 +31,21 @@ class VehicleService
                 'price_per_day',
             ])->toArray();
 
-        if($vehicle){
+        if ($vehicle) {
             $vehicle->update($vehicle_data);
-        }else{
+        } else {
             $vehicle = Vehicle::create($vehicle_data);
         }
 
         return $vehicle;
     }
 
-    public function isVehicleAvailableBetween($start_date, $end_date, ?Vehicle $vehicle = null){
+    public function isVehicleAvailableBetween($start_date, $end_date, ?Vehicle $vehicle = null)
+    {
         $vehicle ??= $this->vehicle;
 
-        return $vehicle->rentals()
-            ->where(function($query) use ($start_date, $end_date){
-                $query->whereBetween('start_date', [$start_date, $end_date])
-                    ->orWhereBetween('end_date', [$start_date, $end_date])
-                    ->orWhere(function($query) use ($start_date, $end_date){
-                        $query->where('start_date', '<=', $start_date)
-                            ->where('end_date', '>=', $end_date);
-                    });
-            })
+        return $vehicle->rentalsBetween($start_date, $end_date)
             ->whereNull('canceled_at')
             ->doesntExist();
     }
-}   
+}

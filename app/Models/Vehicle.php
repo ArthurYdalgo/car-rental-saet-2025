@@ -23,7 +23,8 @@ class Vehicle extends Model
         'deleted_at',
     ];
 
-    protected function casts(){
+    protected function casts()
+    {
         return [
             'price_per_day' => 'decimal:2',
             'trunk_capacity' => 'decimal:2',
@@ -33,24 +34,41 @@ class Vehicle extends Model
     }
 
     #region Relationships
-    public function brand(){
+    public function brand()
+    {
         return $this->belongsTo(Brand::class);
     }
 
-    public function color(){
-        return $this->belongsTo(Color::class); 
+    public function color()
+    {
+        return $this->belongsTo(Color::class);
     }
 
-    public function rentals(){
+    public function rentals()
+    {
         return $this->hasMany(Rental::class);
     }
 
-    public function customers(){
+    public function customers()
+    {
         return $this->belongsToMany(Customer::class, 'rentals');
-    }   
+    }
+    
+    public function rentalsBetween($start_date, $end_date)
+    {
+        return $this->rentals()->between($start_date, $end_date);
+    }
+
+    #region Scopes
+    public function scopeAvailableBetween($query, $start_date, $end_date) {
+        return $query->whereDoesntHave('rentals', function($query) use ($start_date, $end_date){
+            $query->between($start_date, $end_date)->whereNull('canceled_at');
+        });
+    }
 
     #region Methods
-    public function vehicleService(){
+    public function vehicleService()
+    {
         return new VehicleService($this);
     }
 }

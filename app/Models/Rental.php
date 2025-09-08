@@ -40,4 +40,16 @@ class Rental extends Model
     public function vehicle(){
         return $this->belongsTo(Vehicle::class);
     }
+
+    #region Scopes
+    public function scopeBetweenDates($query, $start_date, $end_date){
+        return $query->where(function($query) use ($start_date, $end_date){
+            $query->whereBetween('start_date', [$start_date, $end_date])
+                ->orWhereBetween('end_date', [$start_date, $end_date])
+                ->orWhere(function($query) use ($start_date, $end_date){
+                    $query->where('start_date', '<=', $start_date)
+                        ->where('end_date', '>=', $end_date);
+                });
+        });
+    }
 }
