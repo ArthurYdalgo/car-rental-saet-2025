@@ -14,7 +14,7 @@ class Vehicle extends Model
         'brand_id',
         'color_id',
         'type',
-        'license_place',
+        'license_plate',
         'name',
         'year',
         'seats',
