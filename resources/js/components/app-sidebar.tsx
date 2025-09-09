@@ -3,7 +3,7 @@ import { NavMain } from '@/components/nav-main';
 import { NavUser } from '@/components/nav-user';
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
 import { type NavItem } from '@/types';
-import { BookOpen, Folder, LayoutGrid, UserCircle } from 'lucide-react';
+import { BookOpen, Car, CarFront, Folder, LayoutGrid, Ticket, UserCircle } from 'lucide-react';
 import AppLogo from './app-logo';
 import { Link } from '@laravext/react';
 
@@ -12,6 +12,21 @@ const mainNavItems: NavItem[] = [
         title: 'Dashboard',
         url: '/dashboard',
         icon: LayoutGrid,
+    },
+    {
+        title: 'Clientes',
+        url: '/clientes',
+        icon: UserCircle,
+    },
+    {
+        title: 'Veículos',
+        url: '/veiculos',
+        icon: Car,
+    },
+    {
+        title: 'Reservas',
+        url: '/reservas',
+        icon: Ticket,
     }
 ];
 

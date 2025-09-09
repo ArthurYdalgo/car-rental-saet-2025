@@ -1,3 +1,4 @@
+import { Table as TableComponent } from "@/components/ui/table";
 import Paginated from "./paginated";
 
 export default function Table ({
@@ -39,7 +40,7 @@ export default function Table ({
                                         : ""
                                 }`}
                             >
-                                <table
+                                <TableComponent
                                     className={`min-w-full divide-y divide-gray-300 ${
                                         pagination.loading ? "opacity-50" : ""
                                     } ${tableClassName}`}
@@ -51,7 +52,7 @@ export default function Table ({
                                         },
                                     })}
                                     {tableBody(pagination)}
-                                </table>
+                                </TableComponent>
                             </div>
                         </div>
                     </div>
