@@ -9,6 +9,7 @@ use App\Http\Resources\VehicleResource;
 use App\Models\Vehicle;
 use App\Services\VehicleService;
 use Illuminate\Http\Request;
+use Spatie\QueryBuilder\QueryBuilder;
 
 class VehicleController extends Controller
 {
@@ -17,7 +18,15 @@ class VehicleController extends Controller
      */
     public function index(Request $request)
     {
-        $vehicles = Vehicle::paginate(min($request->query('per_page', 15), 100));
+        $vehicles = QueryBuilder::for(Vehicle::class)
+            ->allowedSorts([
+                'id',
+                'year',
+                'seats',
+                'trunk_capacity',
+                'price_per_day',
+            ])
+            ->paginate(min($request->query('per_page', 15), 100));
 
         return VehicleResource::collection($vehicles);
     }

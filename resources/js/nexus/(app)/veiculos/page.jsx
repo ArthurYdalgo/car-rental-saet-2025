@@ -1,11 +1,9 @@
-import MomentDateTime from '@/components/moment-date-time';
 import Money from '@/components/Money';
 import Number from '@/components/Number';
 import Table from '@/components/pagination/table';
 import TableSortableField from '@/components/pagination/table-sortable-field';
 import { TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import AppLayout from '@/layouts/app-layout';
-import { Tab } from '@headlessui/react';
 import { Head } from '@laravext/react';
 import { useState } from 'react';
 
@@ -43,14 +41,14 @@ export default function Dashboard() {
                                 </TableHead>
                                 <TableHead>
                                     <TableSortableField handleClick={handleClick} sortBy={sortBy} field={'trunk_capacity'}>
-                                    Volume do Porta-malas
+                                        Volume do porta-malas
                                     </TableSortableField>
-                                    </TableHead>
+                                </TableHead>
                                 <TableHead>
                                     <TableSortableField handleClick={handleClick} sortBy={sortBy} field={'price_per_day'}>
-                                    Preço por Dia
+                                        Preço por dia
                                     </TableSortableField>
-                                    </TableHead>
+                                </TableHead>
                             </TableRow>
                         </TableHeader>
                     )}
