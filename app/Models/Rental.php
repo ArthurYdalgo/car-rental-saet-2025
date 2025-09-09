@@ -52,4 +52,8 @@ class Rental extends Model
                 });
         });
     }
+
+    public function scopeBetween($query, $start_date, $end_date){
+        return $query->betweenDates($start_date, $end_date);
+    }
 }
