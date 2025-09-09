@@ -23,16 +23,18 @@ class RentalService
                 'canceled_at',
             ])->toArray();
 
-        if($rental_data){
+        if($rental){
             $rental->update($rental_data);
         }else{
             $rental = Rental::create($rental_data);
         }
 
         if(array_key_exists('payment_methods', $data)){
-            $payment_methods = collect($data['payment_methods'])->mapWithKeys(function($item){
-                [$item['id'] => ['amount' => $item['amount']]];
-            })->toArray();
+            $payment_methods = [];
+
+            foreach($data['payment_methods'] as $method){
+                $payment_methods[$method['id']] = ['amount' => $method['amount']];
+            }
 
             $rental->paymentMethods()->sync($payment_methods);
         }

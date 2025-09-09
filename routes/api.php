@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\CurrentUserController;
 use App\Http\Controllers\Api\CustomerController;
 use App\Http\Controllers\Api\MediaController;
+use App\Http\Controllers\Api\RentalController;
 use App\Http\Controllers\Api\VehicleController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\ConfirmablePasswordController;
@@ -46,4 +47,5 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
     Route::apiResource('customers', CustomerController::class);
     Route::apiResource('vehicles', VehicleController::class);
+    Route::apiResource('rentals', RentalController::class);
 });

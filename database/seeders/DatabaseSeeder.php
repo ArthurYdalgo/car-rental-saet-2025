@@ -33,7 +33,7 @@ class DatabaseSeeder extends Seeder
             line("Admin user created with email '{$user->email}' and password '{$random_password}'");
         }
 
-        $this->call([ColorSeeder::class, BrandSeeder::class]);
+        $this->call([ColorSeeder::class, BrandSeeder::class, PaymentMethodSeeder::class]);
 
         if(isEnvLocal()){
             $this->call([VehicleSeeder::class, CustomerSeeder::class, RentalSeeder::class]); 
