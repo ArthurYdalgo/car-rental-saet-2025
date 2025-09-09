@@ -4,11 +4,13 @@ namespace App\Models;
 
 use App\Traits\HasAddresses;
 use App\Traits\HasPhones;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Customer extends Model
 {
+    use HasFactory;
     use HasPhones, HasAddresses, SoftDeletes;
 
     protected $fillable = [
