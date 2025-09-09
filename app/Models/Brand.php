@@ -7,8 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Brand extends Model
 {
     protected $fillable = [
-        'name',
-        'tag',
+        'name'
     ];
 
     #region Relationships
