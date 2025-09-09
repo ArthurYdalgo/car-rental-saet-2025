@@ -11,6 +11,7 @@ class Rental extends Model
         'vehicle_id',
         'vehicle_price_per_day',
         'price',
+        'days',
         'paid_at',
         'start_date',
         'end_date',
@@ -21,6 +22,7 @@ class Rental extends Model
         return [
             'vehicle_price_per_day' => 'decimal:2',
             'price' => 'decimal:2',
+            'days' => 'integer',
             'start_date' => 'date',
             'end_date' => 'date',
             'paid_at' => 'datetime',
