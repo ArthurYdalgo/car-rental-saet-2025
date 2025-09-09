@@ -37,7 +37,7 @@ class RentalSeeder extends Seeder
 
             $canceled_at = Lottery::odds(1, 100)->choose() ? (clone $start_date)->modify('+'.fake()->numberBetween(0, 2).' days') : null;
 
-            Rental::create(compact('customer_id', 'vehicle_id', 'vehicle_price_per_day', 'price', 'paid_at', 'start_date', 'end_date', 'canceled_at'));
+            Rental::create(compact('customer_id', 'vehicle_id', 'days', 'vehicle_price_per_day', 'price', 'paid_at', 'start_date', 'end_date', 'canceled_at'));
         }
     }
 }

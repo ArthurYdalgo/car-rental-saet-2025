@@ -1,12 +1,13 @@
 import Table from '@/components/pagination/table';
 import AppLayout from '@/layouts/app-layout';
-import { Head } from '@laravext/react';
+import { Head, Link } from '@laravext/react';
 import { useEffect, useState } from 'react';
 import { TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import MomentDateTime from '@/components/moment-date-time';
 import { useFilter } from '@/hooks/use-filter';
 import { useNonInitialEffect } from '@/hooks/use-non-initial-effect';
 import TableSortableField from '@/components/pagination/table-sortable-field';
+import { Button } from '@/components/ui/button';
 
 const breadcrumbs = [
     {
@@ -23,12 +24,16 @@ export default function Dashboard() {
         filter: filters,
     });
 
+    const refresh = () => {
+        setParams({
+            ...params,
+            filter: filters,
+        });
+    }
+
     useNonInitialEffect(() => {
         const delayDebounceFn = setTimeout(() => {
-            setParams({
-                ...params,
-                filter: filters,
-            });
+            refresh();
         }, 1000);
     
         return () => clearTimeout(delayDebounceFn);
@@ -54,6 +59,7 @@ export default function Dashboard() {
                                     </TableSortableField>
                                 </TableHead>
                                 <TableHead>Criado em</TableHead>
+                                <TableHead></TableHead>
                             </TableRow>
                         </TableHeader>
                     )}
@@ -68,6 +74,14 @@ export default function Dashboard() {
                                         <TableCell>{customer.phone?.number ?? '--'}</TableCell>
                                         <TableCell>{customer.rentals_count}</TableCell>
                                         <TableCell><MomentDateTime date={customer.created_at} /></TableCell>
+                                        <TableCell className="flex gap-2">
+                                            <Button asChild variant="default" size="xs">
+                                                <Link href={`/clientes/${customer.id}`}>Ver</Link>
+                                            </Button>
+                                            <Button asChild variant="secondary" size="xs">
+                                                <Link href={`/clientes/${customer.id}/editar`}>Editar</Link>
+                                            </Button>
+                                        </TableCell>
                                     </TableRow>
                                 ))}
                             </TableBody>

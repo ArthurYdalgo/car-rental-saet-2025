@@ -1,5 +1,7 @@
 import If from '@/components/if';
+import MomentDate from '@/components/moment-date';
 import MomentDateTime from '@/components/moment-date-time';
+import Money from '@/components/money';
 import Table from '@/components/pagination/table';
 import TableSortableField from '@/components/pagination/table-sortable-field';
 import TextLink from '@/components/text-link';
@@ -50,6 +52,9 @@ export default function Dashboard() {
                                 <TableHead>ID</TableHead>
                                 <TableHead>Cliente</TableHead>
                                 <TableHead>Veículo</TableHead>
+                                <TableHead>Data de Início</TableHead>
+                                <TableHead>Data de Encerramento</TableHead>
+                                <TableHead>Total</TableHead>
                                 <TableHead>
                                     <TableSortableField handleClick={handleClick} sortBy={sortBy} field={'created_at'}>
                                         Criado em
@@ -67,7 +72,7 @@ export default function Dashboard() {
                                         <TableCell>{rental.id}</TableCell>
                                         <TableCell>
                                             <TextLink>
-                                                {rental.customer.name} ({rental.customer.email})
+                                                {rental.customer.name}
                                             </TextLink>
                                         </TableCell>
                                         <TableCell>
@@ -75,6 +80,16 @@ export default function Dashboard() {
                                                 {rental.vehicle.name} ({rental.vehicle.year}) {rental.vehicle.license_plate}
                                             </TextLink>
                                         </TableCell>
+
+                                        <TableCell>
+                                            <MomentDate date={rental.start_date} />
+                                        </TableCell>
+                                        <TableCell>
+                                            <MomentDate date={rental.end_date} />
+                                        </TableCell>
+
+                                        <TableCell><Money amount={rental.price} /></TableCell>
+
                                         <TableCell>
                                             <MomentDateTime date={rental.created_at} />
                                         </TableCell>
