@@ -22,6 +22,11 @@ class Address extends Model
         'zip_code'
     ];
 
+    protected $hidden = [
+        'addressable_id',
+        'addressable_type',
+    ];
+
     #region Relationships
     public function addressable()
     {
