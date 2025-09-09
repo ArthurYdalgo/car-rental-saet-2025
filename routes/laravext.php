@@ -25,6 +25,10 @@ Route::middleware(['auth'])->group(function () {
     Route::nexus('confirm-password')->name('password.confirm');
     Route::get('verify-email', EmailVerificationPromptController::class)
         ->name('verification.notice');
+
+    Route::laravext('clientes');
+    Route::laravext('veiculos');
+    Route::laravext('reservas');
 });
 
 Route::middleware(['guest'])->group(function () {

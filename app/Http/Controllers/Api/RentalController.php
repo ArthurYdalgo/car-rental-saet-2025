@@ -9,6 +9,8 @@ use App\Http\Resources\RentalResource;
 use App\Models\Rental;
 use App\Services\RentalService;
 use Illuminate\Http\Request;
+use Spatie\QueryBuilder\AllowedInclude;
+use Spatie\QueryBuilder\QueryBuilder;
 
 class RentalController extends Controller
 {
@@ -17,7 +19,19 @@ class RentalController extends Controller
      */
     public function index(Request $request)
     {
-        $rentals = Rental::paginate(min($request->query('per_page', 15), 100));
+        $rentals = QueryBuilder::for(Rental::class)
+        ->allowedIncludes([
+            'customer',
+            'vehicle',
+        ])
+        ->allowedSorts([
+            'start_date',
+            'end_date',
+            'price',
+            'paid_at',
+            'canceled_at',
+        ])
+        ->paginate(min($request->query('per_page', 15), 100));
 
         return RentalResource::collection($rentals);
     }

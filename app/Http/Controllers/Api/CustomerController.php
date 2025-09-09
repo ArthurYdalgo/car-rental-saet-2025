@@ -10,6 +10,8 @@ use App\Models\Customer;
 use App\Services\CustomerService;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Spatie\QueryBuilder\AllowedInclude;
+use Spatie\QueryBuilder\QueryBuilder;
 
 class CustomerController extends Controller
 {
@@ -18,7 +20,16 @@ class CustomerController extends Controller
      */
     public function index(Request $request)
     {
-        $customers = Customer::paginate(min($request->query('per_page', 15), 100));
+        $customers = QueryBuilder::for(Customer::class)
+            ->allowedIncludes([
+                'phone',
+                'address',
+                AllowedInclude::count('rentalsCount'),
+            ])
+            ->allowedSorts([
+                'rentals_count',
+            ])
+            ->paginate(min($request->query('per_page', 15), 100));
 
         return CustomerResource::collection($customers);
     }

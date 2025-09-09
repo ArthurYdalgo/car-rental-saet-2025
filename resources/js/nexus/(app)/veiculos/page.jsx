@@ -29,6 +29,7 @@ export default function Dashboard() {
                             <TableRow>
                                 <TableHead>ID</TableHead>
                                 <TableHead>Nome</TableHead>
+                                <TableHead>Placa</TableHead>
                                 <TableHead>
                                     <TableSortableField handleClick={handleClick} sortBy={sortBy} field={'year'}>
                                         Ano
@@ -59,6 +60,7 @@ export default function Dashboard() {
                                     <TableRow key={vehicle.id}>
                                         <TableCell>{vehicle.id}</TableCell>
                                         <TableCell>{vehicle.name}</TableCell>
+                                        <TableCell>{vehicle.license_plate}</TableCell>
                                         <TableCell>{vehicle.year}</TableCell>
                                         <TableCell>{vehicle.seats}</TableCell>
                                         <TableCell>
