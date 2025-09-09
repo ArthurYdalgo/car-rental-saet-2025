@@ -16,49 +16,38 @@ class BrandSeeder extends Seeder
         $brands = [
             [
                 'name' => 'Toyota',
-                'tag' => 'toyota',
             ],
             [
                 'name' => 'Honda',
-                'tag' => 'honda',
             ],
             [
                 'name' => 'Ford',
-                'tag' => 'ford',
             ],
             [
                 'name' => 'Chevrolet',
-                'tag' => 'chevrolet',
             ],
             [
                 'name' => 'Nissan',
-                'tag' => 'nissan',
             ],
             [
                 'name' => 'Volkswagen',
-                'tag' => 'volkswagen',
             ],
             [
                 'name' => 'Hyundai',
-                'tag' => 'hyundai',
             ],
             [
                 'name' => 'Kia',
-                'tag' => 'kia',
             ],
             [
                 'name' => 'Mazda',
-                'tag' => 'mazda',
             ],
             [
                 'name' => 'Subaru',
-                'tag' => 'subaru',
             ],
         ];
 
         foreach ($brands as $brand) {
             Brand::firstOrCreate(
-                ['tag' => $brand['tag']],
                 ['name' => $brand['name']]
             );
         }
