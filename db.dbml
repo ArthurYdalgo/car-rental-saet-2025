@@ -70,9 +70,10 @@ Table rentals {
   vehicle_id integer
   vehicle_price_per_day decimal
   price decimal
-  paid_at datetime
+  days integer
   starts_at datetime
   ends_at datetime
+  paid_at datetime
 }
 
 Table payment_method_rental {
