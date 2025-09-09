@@ -1,6 +1,5 @@
 import If from '@/components/if';
 import MomentDate from '@/components/moment-date';
-import MomentDateTime from '@/components/moment-date-time';
 import Money from '@/components/money';
 import Table from '@/components/pagination/table';
 import TableSortableField from '@/components/pagination/table-sortable-field';
@@ -28,12 +27,16 @@ export default function Dashboard() {
         filter: filters,
     });
 
+    const refresh = () => {
+        setParams({
+            ...params,
+            filter: filters,
+        });
+    };
+
     useNonInitialEffect(() => {
         const delayDebounceFn = setTimeout(() => {
-            setParams({
-                ...params,
-                filter: filters,
-            });
+            refresh();
         }, 1000);
 
         return () => clearTimeout(delayDebounceFn);
@@ -83,7 +86,8 @@ export default function Dashboard() {
                                         </TableCell>
                                         <TableCell>
                                             <TextLink>
-                                                {rental.vehicle.name} ({rental.vehicle.year}) {rental.vehicle.license_plate}
+                                                {rental.vehicle.name} ({rental.vehicle.color.name}, {rental.vehicle.year}){' '}
+                                                {rental.vehicle.license_plate}
                                             </TextLink>
                                         </TableCell>
 

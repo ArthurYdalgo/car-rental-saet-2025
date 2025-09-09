@@ -3,6 +3,8 @@ import Number from '@/components/Number';
 import Table from '@/components/pagination/table';
 import TableSortableField from '@/components/pagination/table-sortable-field';
 import { TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { useFilter } from '@/hooks/use-filter';
+import { useNonInitialEffect } from '@/hooks/use-non-initial-effect';
 import AppLayout from '@/layouts/app-layout';
 import { Head } from '@laravext/react';
 import { useState } from 'react';
@@ -15,7 +17,26 @@ const breadcrumbs = [
 ];
 
 export default function Dashboard() {
-    const [params, setParams] = useState({});
+    const [params, setParams] = useState({
+        include: 'color,brand'
+    });
+
+    const { filters, setFilter } = useFilter({});
+
+    const refresh = () => {
+        setParams({
+            ...params,
+            filter: filters,
+        });
+    };
+
+    useNonInitialEffect(() => {
+        const delayDebounceFn = setTimeout(() => {
+            refresh();
+        }, 1000);
+
+        return () => clearTimeout(delayDebounceFn);
+    }, [filters]);
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
@@ -23,18 +44,20 @@ export default function Dashboard() {
             <div className="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
                 <Table
                     endpoint={'/api/vehicles'}
-                    params={{}}
+                    params={params}
                     tableHead={({ sortBy, handleClick }) => (
                         <TableHeader>
                             <TableRow>
                                 <TableHead>ID</TableHead>
                                 <TableHead>Nome</TableHead>
                                 <TableHead>Placa</TableHead>
+                                <TableHead>Cor</TableHead>
                                 <TableHead>
                                     <TableSortableField handleClick={handleClick} sortBy={sortBy} field={'year'}>
                                         Ano
                                     </TableSortableField>
                                 </TableHead>
+
                                 <TableHead>
                                     <TableSortableField handleClick={handleClick} sortBy={sortBy} field={'seats'}>
                                         Lugares
@@ -61,6 +84,7 @@ export default function Dashboard() {
                                         <TableCell>{vehicle.id}</TableCell>
                                         <TableCell>{vehicle.name}</TableCell>
                                         <TableCell>{vehicle.license_plate}</TableCell>
+                                        <TableCell>{vehicle.color.name}</TableCell>
                                         <TableCell>{vehicle.year}</TableCell>
                                         <TableCell>{vehicle.seats}</TableCell>
                                         <TableCell>

@@ -26,6 +26,10 @@ class VehicleController extends Controller
                 'trunk_capacity',
                 'price_per_day',
             ])
+            ->allowedIncludes([
+                'color',
+                'brand',
+            ])
             ->paginate(min($request->query('per_page', 15), 100));
 
         return VehicleResource::collection($vehicles);

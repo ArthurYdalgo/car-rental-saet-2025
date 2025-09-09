@@ -22,7 +22,9 @@ class RentalController extends Controller
         $rentals = QueryBuilder::for(Rental::class)
         ->allowedIncludes([
             'customer',
-            'vehicle',
+            AllowedInclude::callback('vehicle', function ($query) {
+                $query->with(['color', 'brand']);
+            }),
         ])
         ->allowedSorts([
             'start_date',
