@@ -52,8 +52,16 @@ export default function Dashboard() {
                                 <TableHead>ID</TableHead>
                                 <TableHead>Cliente</TableHead>
                                 <TableHead>Veículo</TableHead>
-                                <TableHead>Data de Início</TableHead>
-                                <TableHead>Data de Encerramento</TableHead>
+                                <TableHead>
+                                    <TableSortableField handleClick={handleClick} sortBy={sortBy} field={'start_date'}>
+                                        Data de Início
+                                    </TableSortableField>
+                                </TableHead>
+                                <TableHead>
+                                    <TableSortableField handleClick={handleClick} sortBy={sortBy} field={'end_date'}>
+                                        Data de Encerramento
+                                    </TableSortableField>
+                                </TableHead>
                                 <TableHead>Total</TableHead>
                                 <TableHead>
                                     <TableSortableField handleClick={handleClick} sortBy={sortBy} field={'created_at'}>
@@ -71,9 +79,7 @@ export default function Dashboard() {
                                     <TableRow key={rental.id}>
                                         <TableCell>{rental.id}</TableCell>
                                         <TableCell>
-                                            <TextLink>
-                                                {rental.customer.name}
-                                            </TextLink>
+                                            <TextLink>{rental.customer.name}</TextLink>
                                         </TableCell>
                                         <TableCell>
                                             <TextLink>
@@ -88,10 +94,12 @@ export default function Dashboard() {
                                             <MomentDate date={rental.end_date} />
                                         </TableCell>
 
-                                        <TableCell><Money amount={rental.price} /></TableCell>
+                                        <TableCell>
+                                            <Money amount={rental.price} />
+                                        </TableCell>
 
                                         <TableCell>
-                                            <MomentDateTime date={rental.created_at} />
+                                            <MomentDate date={rental.created_at} />
                                         </TableCell>
                                         <TableCell className="flex gap-2">
                                             <Button asChild variant="default" size="xs">
