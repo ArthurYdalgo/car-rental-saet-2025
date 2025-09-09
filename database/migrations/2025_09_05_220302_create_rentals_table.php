@@ -20,9 +20,11 @@ return new class extends Migration
             $table->decimal('vehicle_price_per_day', 10, 2);
             $table->decimal('price');
 
-            $table->dateTime('paid_at')->nullable();
+            $table->integer('days')->nullable();
             $table->date('start_date')->nullable();
             $table->date('end_date')->nullable();
+            
+            $table->dateTime('paid_at')->nullable();
             $table->dateTime("canceled_at")->nullable();
 
             $table->timestamps();
