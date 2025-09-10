@@ -21,7 +21,7 @@ class RentalSeeder extends Seeder
         for($i = 0; $i < 300; $i++) {
             do {
                 $start_date = fake()->dateTimeBetween('-3 years', '+12 months');
-                $end_date = (clone $start_date)->modify('+'.fake()->numberBetween(1, 30).' days');
+                $end_date = (clone $start_date)->modify('+'.fake()->numberBetween(1, 15).' days');
                 
                 $vehicle = Vehicle::availableBetween($start_date, $end_date)->inRandomOrder()->first();
                 $vehicle_id = $vehicle?->id;
