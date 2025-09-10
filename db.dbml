@@ -14,14 +14,12 @@ Table users {
 Table brands {
   id integer [primary key]
   name string 
-  tag string
   created_at datetime
   updated_at datetime
 }
 
 Table colors {
   id integer
-  tag string
   name string
   hex string
   created_at datetime
@@ -49,7 +47,7 @@ Table vehicles {
   name string
   year integer
   seats integer
-  trunk_volume_in_liters decimal
+  trunk_capacity decimal
   price_per_day decimal
   created_at datetime
   updated_at datetime
@@ -62,7 +60,6 @@ Table payment_methods {
   created_at datetime
   updated_at datetime
 }
-
 
 Table rentals {
   id integer
