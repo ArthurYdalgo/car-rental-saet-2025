@@ -1,8 +1,11 @@
 <?php
 
+use App\Http\Controllers\Api\BrandController;
+use App\Http\Controllers\Api\ColorController;
 use App\Http\Controllers\Api\CurrentUserController;
 use App\Http\Controllers\Api\CustomerController;
 use App\Http\Controllers\Api\MediaController;
+use App\Http\Controllers\Api\PaymentMethodController;
 use App\Http\Controllers\Api\RentalController;
 use App\Http\Controllers\Api\VehicleController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
@@ -48,4 +51,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::apiResource('customers', CustomerController::class);
     Route::apiResource('vehicles', VehicleController::class);
     Route::apiResource('rentals', RentalController::class);
+
+    Route::get('colors', [ColorController::class, 'index']);
+    Route::get('brands', [BrandController::class, 'index']);
+    Route::get('payment-methods', [PaymentMethodController::class, 'index']);
 });
