@@ -6,6 +6,7 @@ Este é o projeto para a SAET 2025 da Universidade Tecnológica Federal do Paran
 
 ** Recomenda-se o uso do Laravel Herd para facilitar a configuração do ambiente de desenvolvimento, que pode ser baixado [aqui](https://herd.laravel.com/). **
 
+Instale as seguintes ferramentas para rodar o projeto (caso tenha optado por usar o Laravel Herd, todas essas ferramentas já estarão instaladas):
 - PHP 8.2 ou superior
 - Composer
 - Node.js 18 ou superior
