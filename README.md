@@ -34,8 +34,12 @@ Caso esteja usando Laravel Herd, navegue até o diretório do projeto, e execute
 composer run dev
 ```
 
+Esse comando irá automaticamente iniciar as filas, rodar `npm run dev` e exibir logs. 
+
 Caso contrário, execute:
 
 ```bash
 composer run dev-with-server
 ```
+
+Ele irá realizar as mesmas operações do comando anterior, mas também irá rodar `php artisan serve` para iniciar o servidor embutido do Laravel.
