@@ -1,16 +1,20 @@
 # Car Rental - SAET 2025
 
-Este é o projeto para a SAET 2025 da Universidade Tecnológica Federal do Paraná (UTFPR), focado no desenvolvimento de um sistema de aluguel de veículos.
+Este é o projeto para a Semana Acadêmica (SAET) de 2025 da Universidade Tecnológica Federal do Paraná (UTFPR) - Campus Toledo, focado no desenvolvimento de um sistema de aluguel de veículos.
+
+Este projeto utiliza o framework Laravel (PHP) e Laravext (Adapter de React)
 
 ## Requisitos
 
-** Recomenda-se o uso do Laravel Herd para facilitar a configuração do ambiente de desenvolvimento, que pode ser baixado [aqui](https://herd.laravel.com/). **
+**Recomenda-se o uso do Laravel Herd (disponível para Windows e MacOS) para facilitar a configuração do ambiente de desenvolvimento, que pode ser baixado [aqui](https://herd.laravel.com/).**
 
 Instale as seguintes ferramentas para rodar o projeto (caso tenha optado por usar o Laravel Herd, todas essas ferramentas já estarão instaladas):
 - PHP 8.2 ou superior
 - Composer
 - Node.js 18 ou superior
 - NPM ou Yarn
+
+Caso esteja usando Linux, pode seguir as instruções de instalação dos componentes acima na documentação do Laravel Herd [aqui](https://laravel.com/docs/12.x/installation#installing-php).
 
 ## Como rodar o projeto
 
