@@ -33,7 +33,7 @@ const mainNavItems: NavItem[] = [
 const footerNavItems: NavItem[] = [
     {
         title: 'Repository',
-        url: 'https://github.com/ArthurYdalgo/laravext/tree/main/starter-kits',
+        url: 'https://github.com/ArthurYdalgo/car-rental-saet-2025',
         icon: Folder,
     },
     {
