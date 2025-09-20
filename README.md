@@ -8,12 +8,12 @@ Este é o projeto para a SAET 2025 da Universidade Tecnológica Federal do Paran
 Instale-o usando o comando:
 
 ```bash
-laravel new arthurydalgo/car-rental-saet-2025
+laravel new my-app --using=arthurydalgo/car-rental-saet-2025
 ```
 
-Alternativamente, se quiser usar a versão completa:
+Alternativamente, se quiser usar a versão completa (com todas as funcionalidades implementadas), use:
 
 ```bash
-laravel new arthurydalgo/car-rental-saet-2025@completed
+laravel new my-app --using=arthurydalgo/car-rental-saet-2025:dev-completed
 ```
 
