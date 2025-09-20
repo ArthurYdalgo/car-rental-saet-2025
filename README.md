@@ -1,6 +1,8 @@
 # Car Rental - SAET 2025
 
-Este é o projeto para a SAET 2025 da Universidade Tecnológica Federal do Paraná (UTFPR), focado no desenvolvimento de um sistema de aluguel de veículos.
+Este é o projeto para a Semana Acadêmica (SAET) de 2025 da Universidade Tecnológica Federal do Paraná (UTFPR) - Campus Toledo, focado no desenvolvimento de um sistema de aluguel de veículos.
+
+Este projeto utiliza o framework Laravel (PHP) e Laravext (Adapter de React)
 
 ## Requisitos
 
