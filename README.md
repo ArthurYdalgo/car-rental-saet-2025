@@ -14,16 +14,18 @@ Instale as seguintes ferramentas para rodar o projeto (caso tenha optado por usa
 
 ## Como rodar o projeto
 
+Recomenda-se rodar os comandos a seguir no diretório do Laravel Herd, que pode variar dependendo do sistema operacional. No macOS, o diretório padrão é `~/Herd`. No Windows, o diretório padrão é `%USERPROFILE%\Herd`.
+
 Instale-o usando o comando:
 
 ```bash
-laravel new my-app --using=arthurydalgo/car-rental-saet-2025
+laravel new car-rental-app --using=arthurydalgo/car-rental-saet-2025
 ```
 
 Alternativamente, se quiser usar a versão completa (com todas as funcionalidades implementadas), use:
 
 ```bash
-laravel new my-app --using=arthurydalgo/car-rental-saet-2025:dev-completed
+laravel new car-rental-app --using=arthurydalgo/car-rental-saet-2025:dev-completed
 ```
 
 Caso esteja usando Laravel Herd, navegue até o diretório do projeto, e execute:
