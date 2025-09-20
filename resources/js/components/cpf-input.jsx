@@ -1,21 +1,23 @@
-import { useNonInitialEffect } from "@/hooks/use-non-initial-effect"
-import { InputMask } from "@react-input/mask";
-import { forwardRef, useEffect, useRef } from "react";
+import { useNonInitialEffect } from '@/hooks/use-non-initial-effect';
+import { cn } from '@/lib/utils';
+import { InputMask } from '@react-input/mask';
+import { forwardRef, useRef } from 'react';
+import { Input } from './ui/input';
 
 export default forwardRef(function CPFInput(
     {
-        type = "text",
-        className = "",
+        type = 'text',
+        className = '',
         required = false,
         disabled = false,
-        showMask=true,
-        mask = "___.___.___-__",
+        showMask = true,
+        mask = '___.___.___-__',
         replacement = { _: /\d/ },
         addGrayBackgroundIfDisabled = true,
         isFocused = false,
         ...props
     },
-    ref
+    ref,
 ) {
     const input = ref ? ref : useRef();
 
@@ -26,42 +28,29 @@ export default forwardRef(function CPFInput(
     }, []);
 
     return (
-        <div
-            className={
-                "cursor-default relative w-full rounded-md border border-gray-300 bg-white pl-3 pr-3 py-2 text-left focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition ease-in-out duration-150 sm:text-sm sm:leading-5 " +
-                (disabled && addGrayBackgroundIfDisabled
-                    ? " disabled-gray "
-                    : " ")
-            }
-        >
+        <div>
             {mask || replacement ? (
                 <InputMask
                     mask={mask}
                     replacement={replacement}
                     {...props}
                     showMask={showMask}
-                    className={
-                        "p-0 boxshadow-none outline-none border-none w-full focus:border-none cursor-default relative text-left focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition ease-in-out duration-150 sm:text-sm sm:leading-5" +
-                        (disabled && addGrayBackgroundIfDisabled
-                            ? " disabled-gray "
-                            : " ") +
-                        className
-                    }
+                    className={cn(
+                        'border-input bg-background ring-offset-background file:text-foreground placeholder:text-muted-foreground focus-visible:ring-ring flex h-10 w-full rounded-md border px-3 py-2 text-base file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-hidden disabled:cursor-not-allowed disabled:opacity-50 md:text-sm',
+                        className,
+                    )}
                     type={type}
                     required={required}
                     disabled={disabled}
                     ref={input}
                 />
             ) : (
-                <input
+                <Input
                     {...props}
-                    className={
-                        "p-0 boxshadow-none outline-none border-none w-full focus:border-none cursor-default relative text-left focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition ease-in-out duration-150 sm:text-sm sm:leading-5" +
-                        (disabled && addGrayBackgroundIfDisabled
-                            ? " disabled-gray "
-                            : " ") +
-                        className
-                    }
+                    className={cn(
+                        'border-input bg-background ring-offset-background file:text-foreground placeholder:text-muted-foreground focus-visible:ring-ring flex h-10 w-full rounded-md border px-3 py-2 text-base file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-hidden disabled:cursor-not-allowed disabled:opacity-50 md:text-sm',
+                        className,
+                    )}
                     type={type}
                     required={required}
                     disabled={disabled}

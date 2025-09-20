@@ -1,17 +1,17 @@
 import { ChevronDownIcon } from "lucide-react";
 
-import { Button } from "@/components/ui/button";
-import { Calendar } from "@/components/ui/calendar";
-import { Label } from "@/components/ui/label";
+import { Button } from "@/Components/ui/button";
+import { Calendar } from "@/Components/ui/calendar";
+import { Label } from "@/Components/ui/label";
 import {
     Popover,
     PopoverContent,
     PopoverTrigger,
-} from "@/components/ui/popover";
+} from "@/Components/ui/popover";
 import { useState } from "react";
 import { TrashIcon } from "@heroicons/react/20/solid";
 
-export default function DatePicker ({date, label = 'Data', labelClassName = '', onChangeDate = () => {}, onClear = () => {}}) {
+export default ({date, label = 'Data', labelClassName = '', onChangeDate = () => {}, onClear = () => {}}) => {
     const [open, setOpen] = useState(false);
 
     const [month, setMonth] = useState(date);
@@ -27,7 +27,7 @@ export default function DatePicker ({date, label = 'Data', labelClassName = '', 
                         <Button
                             variant="outline"
                             id="date-picker"
-                            className="w-32 justify-between font-normal py-[18px] border-gray-300"
+                            className="w-32 justify-between font-normal py-[18px]"
                         >
                             {date ? date.toLocaleDateString('pt-BR') :  "Selecione"}
                             <ChevronDownIcon />
