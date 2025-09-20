@@ -46,3 +46,11 @@ composer run dev-with-server
 ```
 
 Ele irá realizar as mesmas operações do comando anterior, mas também irá rodar `php artisan serve` para iniciar o servidor embutido do Laravel.
+
+## Seedando o banco de dados
+
+Para popular o banco de dados com dados iniciais, execute:
+
+```bash
+php artisan db:seed
+```
