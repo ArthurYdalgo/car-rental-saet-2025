@@ -22,13 +22,16 @@ Instale-o usando o comando:
 laravel new car-rental-app --using=arthurydalgo/car-rental-saet-2025
 ```
 
+(Ele pode perguntar "Would you like to run npm install and npm run build?", aperte Enter para aceitar).
+
 Alternativamente, se quiser usar a versão completa (com todas as funcionalidades implementadas), use:
 
 ```bash
 laravel new car-rental-app --using=arthurydalgo/car-rental-saet-2025:dev-completed
 ```
+(Ele pode perguntar "Would you like to run npm install and npm run build?", aperte Enter para aceitar).
 
-Caso esteja usando Laravel Herd, navegue até o diretório do projeto, e execute:
+Caso esteja usando Laravel Herd, navegue até o diretório do projeto, e execute (ele pode pedir para instalar o concurrently, aceite):
 
 ```bash
 composer run dev
@@ -36,7 +39,7 @@ composer run dev
 
 Esse comando irá automaticamente iniciar as filas, rodar `npm run dev` e exibir logs. 
 
-Caso contrário, execute:
+Caso contrário, execute (ele pode pedir para instalar o concurrently, aceite):
 
 ```bash
 composer run dev-with-server
