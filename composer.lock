@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d5799a60f39de9045051bc8380f9a2b9",
+    "content-hash": "baa5289587dd94bba322adcc2b67d3a0",
     "packages": [
         {
             "name": "arthurydalgo/laravext",
