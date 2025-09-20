@@ -1,9 +1,9 @@
 {
     "$schema": "https://getcomposer.org/schema.json",
-    "name": "arthurydalgo/laravext-react-starter-kit",
+    "name": "arthurydalgo/car-rental-saet-2025",
     "type": "project",
-    "version": "1.0.11",
-    "homepage": "https://github.com/arthurydalgo/laravext-react-starter-kit",
+    "version": "1.0.0",
+    "homepage": "https://github.com/arthurydalgo/car-rental-saet-2025",
     "description": "The skeleton application for Laravel framework with Laravext.",
     "keywords": [
         "laravel",
