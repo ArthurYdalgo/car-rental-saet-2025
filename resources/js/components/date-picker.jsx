@@ -1,13 +1,13 @@
 import { ChevronDownIcon } from "lucide-react";
 
-import { Button } from "@/Components/ui/button";
-import { Calendar } from "@/Components/ui/calendar";
-import { Label } from "@/Components/ui/label";
+import { Button } from "@/components/ui/button";
+import { Calendar } from "@/components/ui/calendar";
+import { Label } from "@/components/ui/label";
 import {
     Popover,
     PopoverContent,
     PopoverTrigger,
-} from "@/Components/ui/popover";
+} from "@/components/ui/popover";
 import { useState } from "react";
 import { TrashIcon } from "@heroicons/react/20/solid";
 
@@ -34,11 +34,11 @@ export default ({date, label = 'Data', labelClassName = '', onChangeDate = () =>
                         </Button>
                     </PopoverTrigger>
                     <PopoverContent
-                        className="w-auto overflow-hidden p-0 z-[99]"
+                        className="w-auto overflow-hidden  z-[99]"
                         align="start"
                     >
                         <Calendar
-                            classNames="z-[999999]"
+                            classNames="z-[999999] p-0"
                             mode="single"
                             selected={date}
                             month={month}
