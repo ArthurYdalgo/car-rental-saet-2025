@@ -7,7 +7,7 @@ import {
 import { DayPicker, getDefaultClassNames } from "react-day-picker";
 import { ptBR } from "date-fns/locale"
 import { cn } from "@/lib/utils"
-import { Button, buttonVariants } from "@/Components/ui/button"
+import { Button, buttonVariants } from "@/components/ui/button"
 
 function Calendar({
   className,
@@ -23,6 +23,7 @@ function Calendar({
 
   return (
     (<DayPicker
+      hideNavigation={true}
       locale={ptBR}
       showOutsideDays={showOutsideDays}
       className={cn(

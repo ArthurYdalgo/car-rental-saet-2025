@@ -34,11 +34,11 @@ export default ({date, label = 'Data', labelClassName = '', onChangeDate = () =>
                         </Button>
                     </PopoverTrigger>
                     <PopoverContent
-                        className="w-auto overflow-hidden  z-[99]"
+                        className="w-auto overflow-hidden p-0 z-[99]"
                         align="start"
                     >
                         <Calendar
-                            classNames="z-[999999] p-0"
+                            classNames="z-[999999]"
                             mode="single"
                             selected={date}
                             month={month}
