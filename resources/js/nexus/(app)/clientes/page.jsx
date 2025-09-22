@@ -1,13 +1,13 @@
-import Table from '@/components/pagination/table';
-import AppLayout from '@/layouts/app-layout';
-import { Head, Link } from '@laravext/react';
-import { useEffect, useState } from 'react';
-import { TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import MomentDateTime from '@/components/moment-date-time';
-import { useFilter } from '@/hooks/use-filter';
-import { useNonInitialEffect } from '@/hooks/use-non-initial-effect';
+import Table from '@/components/pagination/table';
 import TableSortableField from '@/components/pagination/table-sortable-field';
 import { Button } from '@/components/ui/button';
+import { TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { useFilter } from '@/hooks/use-filter';
+import { useNonInitialEffect } from '@/hooks/use-non-initial-effect';
+import AppLayout from '@/layouts/app-layout';
+import { Head, Link } from '@laravext/react';
+import { useState } from 'react';
 
 const breadcrumbs = [
     {
@@ -17,8 +17,8 @@ const breadcrumbs = [
 ];
 
 export default function Dashboard() {
-    const {filters, setFilter} = useFilter({});
-    
+    const { filters, setFilter } = useFilter({});
+
     const [params, setParams] = useState({
         include: 'rentalsCount,phone',
         filter: filters,
@@ -29,18 +29,25 @@ export default function Dashboard() {
             ...params,
             filter: filters,
         });
-    }
+    };
 
     useNonInitialEffect(() => {
         const delayDebounceFn = setTimeout(() => {
             refresh();
         }, 1000);
-    
+
         return () => clearTimeout(delayDebounceFn);
     }, [filters]);
 
     return (
-        <AppLayout breadcrumbs={breadcrumbs}>
+        <AppLayout
+            breadcrumbs={breadcrumbs}
+            actions={
+                <Button asChild>
+                    <Link href={route('clientes.cadastrar')}>Cadastrar Novo Cliente</Link>
+                </Button>
+            }
+        >
             <Head title="Clientes" />
             <div className="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
                 <Table
@@ -73,13 +80,15 @@ export default function Dashboard() {
                                         <TableCell>{customer.email}</TableCell>
                                         <TableCell>{customer.phone?.number ?? '--'}</TableCell>
                                         <TableCell>{customer.rentals_count}</TableCell>
-                                        <TableCell><MomentDateTime date={customer.created_at} /></TableCell>
+                                        <TableCell>
+                                            <MomentDateTime date={customer.created_at} />
+                                        </TableCell>
                                         <TableCell className="flex gap-2">
                                             <Button asChild variant="default" size="xs">
-                                                <Link href={`/clientes/${customer.id}`}>Ver</Link>
+                                                <Link href={route('clientes.customer', { customer: customer.id })}>Ver</Link>
                                             </Button>
-                                            <Button asChild variant="secondary" size="xs">
-                                                <Link href={`/clientes/${customer.id}/editar`}>Editar</Link>
+                                            <Button asChild variant="secondary">
+                                                <Link href={route('clientes.customer.editar', { customer: customer.id })}>Editar</Link>
                                             </Button>
                                         </TableCell>
                                     </TableRow>

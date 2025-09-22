@@ -11,14 +11,14 @@ import {
 import { useState } from "react";
 import { TrashIcon } from "@heroicons/react/20/solid";
 
-export default ({date, label = 'Data', labelClassName = '', onChangeDate = () => {}, onClear = () => {}}) => {
+export default ({date, label = 'Data', innerDivClassName='gap-3', labelClassName = '', onChangeDate = () => {}, onClear = () => {}}) => {
     const [open, setOpen] = useState(false);
 
     const [month, setMonth] = useState(date);
 
     return (
         <div className="flex gap-4">
-            <div className="flex flex-col gap-3">
+            <div className={"flex flex-col " + innerDivClassName}>
                 {label && <Label htmlFor="date-picker" className={labelClassName}>
                     {label}
                 </Label>}
@@ -27,7 +27,7 @@ export default ({date, label = 'Data', labelClassName = '', onChangeDate = () =>
                         <Button
                             variant="outline"
                             id="date-picker"
-                            className="w-32 justify-between font-normal py-[18px]"
+                            className="w-auto justify-between font-normal py-[18px]"
                         >
                             {date ? date.toLocaleDateString('pt-BR') :  "Selecione"}
                             <ChevronDownIcon />
@@ -52,7 +52,7 @@ export default ({date, label = 'Data', labelClassName = '', onChangeDate = () =>
                     </PopoverContent>
                 </Popover>
             </div>
-            <div className="flex flex-col gap-3">
+            <div className="flex gap-3 items-center">
                  {label && <Label htmlFor="date-picker" className="px-1 opacity-0">
                     .
                 </Label>}

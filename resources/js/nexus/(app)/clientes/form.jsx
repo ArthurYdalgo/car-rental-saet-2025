@@ -1,162 +1,79 @@
-// your existing inputs
-import CPFInput from '@/components/cpf-input';
-import DatePicker from '@/components/date-picker';
-import ZipCodeInput from '@/components/zip-input';
-
-// the state picker below (place it wherever you keep shared inputs)
-import StatePicker from '@/components/state-picker';
-import { Label } from '@/components/ui/label';
+// app/example-form.jsx
 import { Input } from '@/components/ui/input';
 
-export default ({ formHook, onSubmit = (e) => {}, ...props }) => {
-    const id = (field) => `cliente-form-${field}`;
-    const dv = formHook?.defaultValues || {};
+import { Button } from '@/components/ui/button';
+
+import CpfInput from '@/components/cpf-input';
+import DatePicker from '@/components/date-picker';
+import { FormActions, FormField, FormRow, FormSection } from '@/components/form-layout';
+import StatePicker from '@/components/state-picker';
+import ZipInput from '@/components/zip-input';
+
+export default function Customer() {
     return (
-       <div className="grid gap-6">
-      {/* Personal info */}
-      <div className="grid gap-4 md:grid-cols-2">
-        <div className="grid gap-2">
-          <Label htmlFor={id("name")}>Nome</Label>
-          <Input
-            id={id("name")}
-            name="name"
-            defaultValue={dv.name}
-            placeholder="João"
-          />
-        </div>
+        <form className="space-y-8 p-6">
+            {/* Section 1: Basic info (title on the RIGHT per your spec) */}
+            <FormSection title="Informações Pessoais" titleWidth="md:w-48">
+                <FormRow cols={12}>
+                    <FormField span={6} label="Nome" htmlFor="name" required>
+                        <Input id="name" name="name" placeholder="João" required />
+                    </FormField>
+                    <FormField span={6} label="CPF" htmlFor="last" required>
+                        <CpfInput id="cpf" name="cpf" required/>
+                    </FormField>
 
-        <div className="grid gap-2">
-          <Label htmlFor={id("email")}>E-mail</Label>
-          <Input
-            id={id("email")}
-            name="email"
-            type="email"
-            defaultValue={dv.email}
-            placeholder="joao@utfpr.edu.br"
-          />
-        </div>
+                    <FormField span={8} label="Email" htmlFor="email" required>
+                        <Input id="email" type="email" placeholder="joao@gmail.com" />
+                    </FormField>
+                    <FormField span={4} label="Data de Nascimento" htmlFor="birthday" required>
+                        <DatePicker innerDivClassName="w-full" id="birthday" name="birthday" label={null} required/>
+                    </FormField>
+                </FormRow>
+            </FormSection>
 
-        <div className="grid gap-2">
-          <Label htmlFor={id("cpf")}>CPF</Label>
-          <CPFInput
-            id={id("cpf")}
-            name="cpf"
-            placeholder="000.000.000-00"
-            defaultValue={dv.cpf}
-          />
-        </div>
+            <FormSection title="Documentação" titleWidth="md:w-48">
+                <FormRow cols={12}>
+                    <FormField span={8} label="CNH" htmlFor="license_number" required>
+                        <Input id="license_number" name="license_number" placeholder="Número da CNH"  required/>
+                    </FormField>
+                    <FormField span={4} label="UF emissora da CNH" htmlFor="license_issuing_state" required>
+                        <StatePicker id="license_issuing_state" name="license_issuing_state" required/>
+                    </FormField>
+                </FormRow>
+            </FormSection>
 
-        <div className="grid gap-2">
-          
-          <DatePicker
-            label={"Data de nascimento"}
-            id={id("birthday")}
-            name="birthday"
-            defaultValue={dv.birthday}
-            placeholder="1997-01-01"
-          />
-        </div>
-      </div>
+            <FormSection title="Endereço" titleWidth="md:w-48">
+                <FormRow cols={12}>
+                    <FormField span={12} label="CEP" htmlFor="address.street" required>
+                        <Input id="address.street" name="address.street" placeholder="Av. Brasil" required/>
+                    </FormField>
 
-      {/* Driver's license */}
-      <div className="grid gap-4 md:grid-cols-2">
-        <div className="grid gap-2">
-          <Label htmlFor={id("license_number")}>Nº da CNH</Label>
-          <Input
-            id={id("license_number")}
-            name="license_number"
-            defaultValue={dv.license_number}
-            placeholder="12345"
-          />
-        </div>
+                    <FormField span={4} label="Número" htmlFor="address.number" required>
+                        <Input id="address.number" name="address.number" placeholder="Av. Brasil" required/>
+                    </FormField>
+                    <FormField span={4} label="Complemento" htmlFor="address.complement" required>
+                        <Input id="address.complement" name="address.complement" placeholder="Av. Brasil" required/>
+                    </FormField>
+                    <FormField span={4} label="Bairro" htmlFor="address.bairro" required>
+                        <Input id="address.bairro" name="address.bairro" placeholder="Av. Brasil" required/>
+                    </FormField>
+                    
+                    <FormField span={4} label="CEP" htmlFor="address.zip_code" required>
+                        <ZipInput id="address.zip_code" name="address.zip_code" placeholder="85902-490" required/>
+                    </FormField>
+                    <FormField span={4} label="Cidade" htmlFor="address.city" required>
+                        <Input id="address.city" name="address.city" placeholder="São Paulo" required/>
+                    </FormField>
+                    <FormField span={4} label="UF" htmlFor="address.state" required>
+                        <StatePicker id="address.state" name="address.state" required/>
+                    </FormField>
+                </FormRow>
+            </FormSection>
 
-        <div className="grid gap-2">
-          <Label htmlFor={id("license_issuing_state")}>UF emissora da CNH</Label>
-          <StatePicker
-            id={id("license_issuing_state")}
-            name="license_issuing_state"
-            defaultValue={dv.license_issuing_state}
-            placeholder="PR"
-          />
-        </div>
-      </div>
-
-      {/* Address */}
-      <div className="grid gap-4">
-        <div className="grid gap-4 md:grid-cols-3">
-          <div className="grid gap-2">
-            <Label htmlFor={id("address.zip_code")}>CEP</Label>
-            <ZipCodeInput
-              id={id("address.zip_code")}
-              name="address.zip_code"
-              defaultValue={dv.address?.zip_code}
-              placeholder="85902-490"
-            />
-          </div>
-
-          <div className="grid gap-2">
-            <Label htmlFor={id("address.state")}>UF</Label>
-            <StatePicker
-              id={id("address.state")}
-              name="address.state"
-              defaultValue={dv.address?.state}
-              placeholder="PR"
-            />
-          </div>
-
-          <div className="grid gap-2">
-            <Label htmlFor={id("address.city")}>Cidade</Label>
-            <Input
-              id={id("address.city")}
-              name="address.city"
-              defaultValue={dv.address?.city}
-              placeholder="Toledo"
-            />
-          </div>
-        </div>
-
-        <div className="grid gap-4 md:grid-cols-3">
-          <div className="grid gap-2">
-            <Label htmlFor={id("address.district")}>Bairro</Label>
-            <Input
-              id={id("address.district")}
-              name="address.district"
-              defaultValue={dv.address?.district}
-              placeholder="Vila Becker"
-            />
-          </div>
-
-          <div className="grid gap-2">
-            <Label htmlFor={id("address.street")}>Rua</Label>
-            <Input
-              id={id("address.street")}
-              name="address.street"
-              defaultValue={dv.address?.street}
-              placeholder="R. Cristo Rei"
-            />
-          </div>
-
-          <div className="grid gap-2">
-            <Label htmlFor={id("address.number")}>Número</Label>
-            <Input
-              id={id("address.number")}
-              name="address.number"
-              defaultValue={dv.address?.number}
-              placeholder="19"
-            />
-          </div>
-        </div>
-
-        <div className="grid gap-2">
-          <Label htmlFor={id("address.complement")}>Complemento</Label>
-          <Input
-            id={id("address.complement")}
-            name="address.complement"
-            defaultValue={dv.address?.complement}
-            placeholder="Bloco E. Sala 306"
-          />
-        </div>
-      </div>
-    </div>
+            {/* Actions */}
+            <FormActions>
+                <Button type="submit">Salvar</Button>
+            </FormActions>
+        </form>
     );
-};
+}

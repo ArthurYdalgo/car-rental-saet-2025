@@ -6,19 +6,23 @@ import { TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/compon
 import { useFilter } from '@/hooks/use-filter';
 import { useNonInitialEffect } from '@/hooks/use-non-initial-effect';
 import AppLayout from '@/layouts/app-layout';
-import { Head } from '@laravext/react';
+import { Head, nexusProps, routeParams } from '@laravext/react';
 import { useState } from 'react';
-import Form from '../../form';
+import Form from '../form';
 
 
 export default () => {
-    
+    const [customer, setCustomer] = useState(nexusProps().customer ?? routeParams().customer);
     
     return (
         <AppLayout breadcrumbs={[
             {
                 title: 'Clientes',
-                href: '/clientes',
+                href: route("clientes"),
+            },
+            {
+                title: `${customer}`,
+                href: route("clientes.customer", {customer: customer})
             }
         ]}>
             <Head title="Veículos" />
