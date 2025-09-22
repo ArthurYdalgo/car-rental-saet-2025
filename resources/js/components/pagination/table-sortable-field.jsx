@@ -26,11 +26,16 @@ const TableSortableField = ({handleClick, field, sortBy = [], className, childre
         handleClick(field, newValue());
     }
 
+
+    const iconStyle = { width: '14px', height: '14px', flexShrink: 0 }; // Ensure fixed size and prevent shrinking
+
     return (isSortable ? <div props={props} onClick={handleToggle} className={className ?? "flex hover:cursor-pointer items-center"}>
         <span className="whitespace-nowrap mr-1">{children}</span>
-        {value == 0 && <ArrowUpDown />}
-        {value == 1 && <ArrowUp />}
-        {value == -1 && <ArrowDown />}
+        <div style={{ display: 'flex', alignItems: 'center', flexShrink: 0 }}>
+            {value == 0 && <ArrowUpDown style={iconStyle} />}
+            {value == 1 && <ArrowUp style={iconStyle} />}
+            {value == -1 && <ArrowDown style={iconStyle} />}
+        </div>
         <div className="w-full flex prevent-select">
         {isFieldBeingSorted && <Badge className="ml-1" variant={value == 1 ? 'green' : 'yellow'}>{position+1}</Badge>}
         </div>

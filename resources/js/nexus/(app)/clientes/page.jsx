@@ -43,7 +43,7 @@ export default function Dashboard() {
         <AppLayout
             breadcrumbs={breadcrumbs}
             actions={
-                <Button asChild>
+                <Button size="xs" asChild>
                     <Link href={route('clientes.cadastrar')}>Cadastrar Novo Cliente</Link>
                 </Button>
             }
@@ -87,7 +87,7 @@ export default function Dashboard() {
                                             <Button asChild variant="default" size="xs">
                                                 <Link href={route('clientes.customer', { customer: customer.id })}>Ver</Link>
                                             </Button>
-                                            <Button asChild variant="secondary">
+                                            <Button asChild variant="secondary" size="xs">
                                                 <Link href={route('clientes.customer.editar', { customer: customer.id })}>Editar</Link>
                                             </Button>
                                         </TableCell>

@@ -20,7 +20,7 @@ class CustomerFactory extends Factory
         $last_name = $this->faker->lastName();
 
         $name = "{$first_name} {$last_name}";
-        $email = strtolower("{$first_name}.{$last_name}." . random_int(1000, 9999) . '@example.com');
+        $email = str("{$first_name}.{$last_name}." . random_int(1000, 9999) . '@example.com')->lower()->unnaccent()->replace(' ', '.');
 
         return [
             'name' => $name,

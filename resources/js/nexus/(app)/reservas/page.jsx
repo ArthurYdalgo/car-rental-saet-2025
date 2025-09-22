@@ -82,7 +82,7 @@ export default function Dashboard() {
                                     <TableRow key={rental.id}>
                                         <TableCell>{rental.id}</TableCell>
                                         <TableCell>
-                                            <TextLink>{rental.customer.name}</TextLink>
+                                            <TextLink href={route('clientes.customer', {customer: rental.customer.id})}>{rental.customer.name}</TextLink>
                                         </TableCell>
                                         <TableCell>
                                             <TextLink>
