@@ -82,11 +82,11 @@ export default function Dashboard() {
                                     <TableRow key={rental.id}>
                                         <TableCell>{rental.id}</TableCell>
                                         <TableCell>
-                                            <TextLink href={route('clientes.customer', {customer: rental.customer.id})}>{rental.customer.name}</TextLink>
+                                            <TextLink href={route('clientes.customer', {customer: rental.customer.id})}>{rental.customer.first_name}</TextLink>
                                         </TableCell>
                                         <TableCell>
                                             <TextLink>
-                                                {rental.vehicle.name} ({rental.vehicle.color.name}, {rental.vehicle.year}){' '}
+                                                {rental.vehicle.name} ({rental.vehicle.color.name}){' '}
                                                 {rental.vehicle.license_plate}
                                             </TextLink>
                                         </TableCell>

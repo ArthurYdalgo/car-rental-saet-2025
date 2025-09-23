@@ -1,15 +1,17 @@
 import { useForm } from '@/hooks/use-form';
 import AppLayout from '@/layouts/app-layout';
-import { Head, nexus, nexusProps, routeParams } from '@laravext/react';
+import { Head, nexus, nexusProps, routeParams, visit } from '@laravext/react';
 import { useState } from 'react';
 import Form from '../../form';
 import CustomerForm from '../../form';
 import { dateToDateString, dateToForm } from '@/lib/utils';
+import axios from 'axios';
+import { toast } from "sonner";
 
 export default () => {
     const [customer, setCustomer] = useState(nexusProps().customer);
 
-    const { data, setData, errors, reset, processing, setProcessing } = useForm({
+    const { data, setData, errors, setErrors, reset, processing, setProcessing } = useForm({
         ...nexusProps().customer,
         birthday: dateToForm(nexusProps().customer.birthday),
     });
@@ -20,6 +22,23 @@ export default () => {
         let body = {...data, birthday: dateToDateString(data.birthday)};
 
         setProcessing(true);
+
+        axios.put(`/api/customers/${customer.id}`, body)
+        .then((response) => {
+            toast.success("Cliente atualizado com sucesso!");
+            // visit(route("clientes.customer", {customer: customer.id}));
+        })
+        .catch((error) => {
+            let response = error.response.data;
+            console.log(response);
+            let message = response?.message ?? "Erro ao atualizar cliente.";
+
+            toast.error(message);
+            setErrors(response?.errors);
+        })
+        .finally(() => {
+            setProcessing(false);
+        });
     }
 
     return (

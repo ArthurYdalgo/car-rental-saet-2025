@@ -133,7 +133,7 @@ export default function CustomerForm({ formHook, onSubmit = (e) => {}, ...props 
                         />
                     </FormField>
 
-                    <FormField span={4} error={formHook.errors.email} label="Número" htmlFor="address.number" required>
+                    <FormField span={4} error={formHook.errors['address.number']} label="Número" htmlFor="address.number" required>
                         <Input
                             id="address.number"
                             name="address.number"
@@ -143,7 +143,7 @@ export default function CustomerForm({ formHook, onSubmit = (e) => {}, ...props 
                             onChange={(e) => formHook.setData('address', { ...formHook.data.address, number: e.target.value })}
                         />
                     </FormField>
-                    <FormField span={4} error={formHook.errors.email} label="Complemento" htmlFor="address.complement" required>
+                    <FormField span={4} error={formHook.errors['address.complement']} label="Complemento" htmlFor="address.complement" required>
                         <Input
                             id="address.complement"
                             name="address.complement"
@@ -153,7 +153,7 @@ export default function CustomerForm({ formHook, onSubmit = (e) => {}, ...props 
                             onChange={(e) => formHook.setData('address', { ...formHook.data.address, complement: e.target.value })}
                         />
                     </FormField>
-                    <FormField span={4} error={formHook.errors.email} label="Bairro" htmlFor="address.district" required>
+                    <FormField span={4} error={formHook.errors['address.district']} label="Bairro" htmlFor="address.district" required>
                         <Input
                             id="address.district"
                             name="address.district"
@@ -164,7 +164,7 @@ export default function CustomerForm({ formHook, onSubmit = (e) => {}, ...props 
                         />
                     </FormField>
 
-                    <FormField span={4} error={formHook.errors.email} label="CEP" htmlFor="address.zip_code" required>
+                    <FormField span={4} error={formHook.errors['address.zip_code']} label="CEP" htmlFor="address.zip_code" required>
                         <ZipInput
                             id="address.zip_code"
                             name="address.zip_code"
@@ -176,7 +176,7 @@ export default function CustomerForm({ formHook, onSubmit = (e) => {}, ...props 
                             onChange={(e) => formHook.setData('address', { ...formHook.data.address, zip_code: e.target.value })}
                         />
                     </FormField>
-                    <FormField span={4} error={formHook.errors.email} label="Cidade" htmlFor="address.city" required>
+                    <FormField span={4} error={formHook.errors['address.city']} label="Cidade" htmlFor="address.city" required>
                         <Input
                             id="address.city"
                             name="address.city"
@@ -186,7 +186,7 @@ export default function CustomerForm({ formHook, onSubmit = (e) => {}, ...props 
                             onChange={(e) => formHook.setData('address', { ...formHook.data.address, city: e.target.value })}
                         />
                     </FormField>
-                    <FormField span={4} error={formHook.errors.email} label="UF" htmlFor="address.state" required>
+                    <FormField span={4} error={formHook.errors['address.state']} label="UF" htmlFor="address.state" required>
                         <StatePicker
                             id="address.state"
                             name="address.state"
