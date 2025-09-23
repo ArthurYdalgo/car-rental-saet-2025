@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\CustomerController;
 use App\Http\Controllers\Api\MediaController;
 use App\Http\Controllers\Api\PaymentMethodController;
 use App\Http\Controllers\Api\RentalController;
+use App\Http\Controllers\Api\SearchZipCodeController;
 use App\Http\Controllers\Api\VehicleController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\ConfirmablePasswordController;
@@ -55,4 +56,6 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('colors', [ColorController::class, 'index']);
     Route::get('brands', [BrandController::class, 'index']);
     Route::get('payment-methods', [PaymentMethodController::class, 'index']);
+
+    Route::get("tools/search-zip-code", SearchZipCodeController::class);
 });

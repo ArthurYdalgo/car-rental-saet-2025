@@ -5,6 +5,8 @@ use App\Services\Slack\SlackService;
 use GuzzleHttp\Exception\BadResponseException;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Http;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Cache;
 use Symfony\Component\Console\Output\ConsoleOutput;
 
 if (!function_exists('isEnvDevelopment')) {
@@ -71,6 +73,71 @@ if (!function_exists('isEnvProduction')) {
     function isEnvProduction()
     {
         return app()->environment() == "production";
+    }
+}
+
+if (!function_exists('defaultErrorResponseMessage')) {
+    function defaultErrorResponseMessage()
+    {
+        return 'Erro ao processar a requisição';
+    }
+}
+
+if (!function_exists('defaultSuccessResponseMessage')) {
+    function defaultSuccessResponseMessage()
+    {
+        return 'Requisição processada com sucesso';
+    }
+}
+
+if (!function_exists('searchZipCode')) {
+    function searchZipCode(string $zip_code, $use_cache = true)
+    {
+        $cache_store = 'file';
+        $cache_key = "{$zip_code}_search";
+        
+        Cache::forgetIf($cache_key, !$use_cache, $cache_store);
+        
+        return Cache::store($cache_store)->rememberForever($cache_key, function () use ($zip_code) {
+            $response = apiCall("https://viacep.com.br/ws/{$zip_code}/json/");
+    
+            return [
+                'state' => $response['estado'] ?? null,
+                'uf' => $response['uf'],
+                'city' => $response['localidade'],
+                'district' => $response["bairro"],
+                'street' => $response['logradouro'],
+                'zip_code' => $response['cep'],
+            ];
+        });
+    }
+}
+
+if (!function_exists('handleOrCatch')) {
+    function handleOrCatch(\Closure $callback, $error_response_message = null, $successful_response_message = null, $use_exception_message = false)
+    {
+        $controller = new Controller();
+        try {
+            $message = $successful_response_message ?? defaultSuccessResponseMessage();
+
+            $callback_result = $callback();
+
+            if (is_null($callback_result) || is_string($callback_result)) {
+                return $controller->successResponse($callback_result ?? $message);
+            }
+
+            if (is_array($callback_result)) {
+                return $controller->successResponse($message, $callback_result);
+            }
+
+            return $callback_result;
+        } catch (\Throwable $th) {
+            report($th);
+
+            $message = $use_exception_message ? $th->getMessage() : ($error_response_message ?? defaultErrorResponseMessage());
+
+            return $controller->errorResponse($message, $th);
+        }
     }
 }
 

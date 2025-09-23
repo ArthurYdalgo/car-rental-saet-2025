@@ -128,6 +128,7 @@ export function FormField({
   label,
   htmlFor,
   description,
+  error,
   required,
   className,
   children,
@@ -158,6 +159,9 @@ export function FormField({
         </Label>
       ) : null}
       {children}
+      {error ? (
+        <p className="text-xs text-destructive">{error}</p>
+      ) : null}
       {description ? (
         <p className="text-xs text-muted-foreground">{description}</p>
       ) : null}

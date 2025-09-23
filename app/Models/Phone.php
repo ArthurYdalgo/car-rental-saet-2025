@@ -15,6 +15,11 @@ class Phone extends Model
         'number',
     ];
 
+    protected $hidden = [
+        'model_id',
+        'model_type',
+    ];
+
     #region Relationships
     public function model()
     {

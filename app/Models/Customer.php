@@ -22,13 +22,16 @@ class Customer extends Model
         'license_issuing_state',
     ];
 
+    protected $appends = [
+        'first_name',
+    ];
+
     protected function casts(): array
     {
         return [
             'birthday' => 'date'
         ];
     }
-    
 
     #region Relationships
     public function rentals(){
@@ -38,4 +41,9 @@ class Customer extends Model
     public function vehicles(){
         return $this->belongsToMany(Vehicle::class, 'rentals');
     } 
+
+    #region Getters and Setters
+    public function getFirstNameAttribute() {
+        return explode(' ', $this->name)[0];
+    }
 }

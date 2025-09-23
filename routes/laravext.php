@@ -3,6 +3,7 @@
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\EmailVerificationPromptController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
+use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\Settings\PasswordController;
 use App\Http\Controllers\Settings\ProfileController;
 use Illuminate\Support\Facades\Route;
@@ -27,6 +28,9 @@ Route::middleware(['auth'])->group(function () {
         ->name('verification.notice');
 
     Route::laravext('clientes');
+    Route::get("clientes/{customer}/editar", [CustomerController::class, 'edit'])->name('clientes.customer.editar');
+    Route::get("clientes/{customer}", [CustomerController::class, 'show'])->name('clientes.customer');
+
     Route::laravext('veiculos');
     Route::laravext('reservas');
 });

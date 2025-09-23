@@ -12,7 +12,7 @@ import Form from '../form';
 
 
 export default () => {
-    const [customer, setCustomer] = useState(nexusProps().customer ?? routeParams().customer);
+    const [customer, setCustomer] = useState(nexusProps().customer);
     
     return (
         <AppLayout breadcrumbs={[
@@ -21,12 +21,11 @@ export default () => {
                 href: route("clientes"),
             },
             {
-                title: `${customer}`,
+                title: `#${customer.id} ${customer.first_name}`,
                 href: route("clientes.customer", {customer: customer})
             }
         ]}>
             <Head title="Veículos" />
-            <Form />        
         </AppLayout>
     );
 }
