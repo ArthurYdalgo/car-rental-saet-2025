@@ -39,8 +39,7 @@ export default forwardRef(function ZipInput(
     );
 
     return (
-        <div
-        >
+        <div className="relative">
             {mask || replacement ? (
                 <InputMask
                     mask={mask}
@@ -64,7 +63,7 @@ export default forwardRef(function ZipInput(
                 />
             )}
             {loading && (
-                <div className="absolute right-3 transform" style={{ top: 'calc(50% - 11px)' }}>
+                <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
                     <svg
                         role="status"
                         className="inline w-4 h-4 text-gray-700 animate-spin"
