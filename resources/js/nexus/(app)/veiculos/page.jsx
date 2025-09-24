@@ -2,11 +2,12 @@ import Money from '@/components/Money';
 import Number from '@/components/Number';
 import Table from '@/components/pagination/table';
 import TableSortableField from '@/components/pagination/table-sortable-field';
+import { Button } from '@/components/ui/button';
 import { TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { useFilter } from '@/hooks/use-filter';
 import { useNonInitialEffect } from '@/hooks/use-non-initial-effect';
 import AppLayout from '@/layouts/app-layout';
-import { Head } from '@laravext/react';
+import { Head, Link } from '@laravext/react';
 import { useState } from 'react';
 
 const breadcrumbs = [
@@ -18,7 +19,7 @@ const breadcrumbs = [
 
 export default function Dashboard() {
     const [params, setParams] = useState({
-        include: 'color,brand'
+        include: 'color,brand',
     });
 
     const { filters, setFilter } = useFilter({});
@@ -39,7 +40,16 @@ export default function Dashboard() {
     }, [filters]);
 
     return (
-        <AppLayout breadcrumbs={breadcrumbs}>
+        <AppLayout
+            breadcrumbs={breadcrumbs}
+            actions={
+                <div className="ml-auto flex items-center gap-2">
+                    <Button size="xs" asChild>
+                        <Link href={route('veiculos.cadastrar')}>Cadastrar</Link>
+                    </Button>
+                </div>
+            }
+        >
             <Head title="Veículos" />
             <div className="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
                 <Table
@@ -73,6 +83,7 @@ export default function Dashboard() {
                                         Preço por dia
                                     </TableSortableField>
                                 </TableHead>
+                                <TableHead></TableHead>
                             </TableRow>
                         </TableHeader>
                     )}
@@ -84,7 +95,13 @@ export default function Dashboard() {
                                         <TableCell>{vehicle.id}</TableCell>
                                         <TableCell>{vehicle.name}</TableCell>
                                         <TableCell>{vehicle.license_plate}</TableCell>
-                                        <TableCell>{vehicle.color.name}</TableCell>
+                                        <TableCell className="flex items-center gap-2">
+                                            {vehicle.color.name}{' '}
+                                            <div
+                                                className="h-3 w-3 rounded"
+                                                style={{ backgroundColor: vehicle.color.hex, border: '1px solid #aaaaaa44' }}
+                                            ></div>
+                                        </TableCell>
                                         <TableCell>{vehicle.year}</TableCell>
                                         <TableCell>{vehicle.seats}</TableCell>
                                         <TableCell>
@@ -92,6 +109,14 @@ export default function Dashboard() {
                                         </TableCell>
                                         <TableCell>
                                             <Money amount={vehicle.price_per_day} />
+                                        </TableCell>
+                                        <TableCell className="flex gap-2">
+                                            <Button asChild variant="default" size="xs">
+                                                <Link href={route('veiculos.vehicle', { vehicle: vehicle.id })}>Ver</Link>
+                                            </Button>
+                                            <Button asChild variant="secondary" size="xs">
+                                                <Link href={route('veiculos.vehicle.editar', { vehicle: vehicle.id })}>Editar</Link>
+                                            </Button>
                                         </TableCell>
                                     </TableRow>
                                 ))}

@@ -22,12 +22,12 @@ class VehicleFactory extends Factory
         return [
             'brand_id' => Brand::inRandomOrder()->first()->id,
             'color_id' => Color::inRandomOrder()->first()->id,
-            'type' => $this->faker->randomElement(VehicleService::$types),
+            'type' => $this->faker->randomElement(array_keys(VehicleService::$types)),
             'license_plate' => strtoupper($this->faker->bothify('???-####')),
             'name' => $this->faker->randomElement(['Model S', 'Model 3', 'Model X', 'Model Y', 'Civic', 'Corolla', 'Mustang', 'Camry', 'Accord', 'Altima']),
             'year' => $this->faker->numberBetween(2000, 2024),
             'seats' => $this->faker->numberBetween(5, 9),
-            'trunk_capacity' => $this->faker->randomFloat(2, 200, 500),
+            'trunk_capacity' => $this->faker->numberBetween(100, 500),
             'price_per_day' => $this->faker->randomFloat(2, 100, 1000),
         ];
     }

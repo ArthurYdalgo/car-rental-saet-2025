@@ -2,28 +2,27 @@ import { FormField, FormRow, FormSection } from '@/components/form-layout';
 import { Button } from '@/components/ui/button';
 import AppLayout from '@/layouts/app-layout';
 import { Head, Link, nexusProps } from '@laravext/react';
-import moment from 'moment';
 import { useState } from 'react';
 
 export default () => {
-    const [customer, setCustomer] = useState(nexusProps().customer);
+    const [vehicle, setVehicle] = useState(nexusProps().vehicle);
 
     return (
         <AppLayout
             breadcrumbs={[
                 {
-                    title: 'Clientes',
-                    href: route('clientes'),
+                    title: 'Veículos',
+                    href: route('veiculos'),
                 },
                 {
-                    title: `#${customer.id} ${customer.first_name}`,
-                    href: route('clientes.customer', { customer: customer.id }),
+                    title: `#${vehicle.id} ${vehicle.name}`,
+                    href: route('veiculos.vehicle', { vehicle: vehicle.id }),
                 },
             ]}
             actions={
                 <div className="ml-auto flex items-center gap-2">
                     <Button size="xs" asChild>
-                        <Link href={route('clientes.customer.editar', { customer: customer.id })}>Editar</Link>
+                        <Link href={route('veiculos.vehicle.editar', { vehicle: vehicle.id })}>Editar</Link>
                     </Button>
                 </div>
             }
@@ -33,27 +32,27 @@ export default () => {
                 <FormSection title="Informações Pessoais" titleWidth="md:w-48">
                     <FormRow cols={12}>
                         <FormField span={8} label="Nome">
-                            {customer.name}
+                            {vehicle.name}
                         </FormField>
                         <FormField span={4} label="CPF">
-                            {customer.cpf}
+                            {vehicle.cpf}
                         </FormField>
 
                         <FormField span={8} label="Email">
-                            {customer.email}
+                            {vehicle.email}
                         </FormField>
-                        <FormField span={4} label="Data de Nascimento">
-                            {moment(customer.birthday).format('DD/MM/YYYY')}
+                        <FormField span={4} label="Ano">
+                            {vehicle.year}
                         </FormField>
                     </FormRow>
                 </FormSection>
-
+                {/* 
                 <FormSection title="Documentação" titleWidth="md:w-48">
                     <FormRow cols={12}>
-                        <FormField span={8} label="CNH">
+                        <FormField span={6} label="CNH">
                             {customer.license_number}
                         </FormField>
-                        <FormField span={4} label="UF emissora da CNH">
+                        <FormField span={6} label="UF emissora da CNH">
                             {customer.license_issuing_state}
                         </FormField>
                     </FormRow>
@@ -85,7 +84,7 @@ export default () => {
                             {customer.address.state}
                         </FormField>
                     </FormRow>
-                </FormSection>
+                </FormSection> */}
             </div>
         </AppLayout>
     );

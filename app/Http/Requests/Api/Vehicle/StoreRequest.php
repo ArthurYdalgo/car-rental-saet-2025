@@ -27,7 +27,7 @@ class StoreRequest extends FormRequest
             'brand_id' => ['required', 'exists:brands,id'],
             'color_id' => ['required', 'exists:colors,id'],
 
-            'type' => ['required', 'string', 'max:255', Rule::in(VehicleService::$types)],
+            'type' => ['required', 'string', 'max:255', Rule::in(array_keys(VehicleService::$types))],
             'license_plate' => ['required', 'string', 'max:20'],
             'name' => ['required', 'string', 'max:255'],
             'year' => ['required', 'integer', 'min:1900', 'max:' . (date('Y') + 1)],

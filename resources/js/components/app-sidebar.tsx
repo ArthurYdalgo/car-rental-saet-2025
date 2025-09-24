@@ -8,11 +8,11 @@ import AppLogo from './app-logo';
 import { Link } from '@laravext/react';
 
 const mainNavItems: NavItem[] = [
-    // {
-    //     title: 'Dashboard',
-    //     url: '/dashboard',
-    //     icon: LayoutGrid,
-    // },
+    {
+        title: 'Dashboard',
+        url: '/dashboard',
+        icon: LayoutGrid,
+    },
     {
         title: 'Clientes',
         url: '/clientes',
@@ -50,7 +50,7 @@ export function AppSidebar() {
                 <SidebarMenu>
                     <SidebarMenuItem>
                         <SidebarMenuButton size="lg" asChild>
-                            <Link href={route("clientes")}>
+                            <Link href={route("dashboard")}>
                                 <AppLogo />
                             </Link>
                         </SidebarMenuButton>

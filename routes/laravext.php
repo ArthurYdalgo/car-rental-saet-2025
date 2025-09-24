@@ -6,6 +6,7 @@ use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\Settings\PasswordController;
 use App\Http\Controllers\Settings\ProfileController;
+use App\Http\Controllers\VehicleController;
 use Illuminate\Support\Facades\Route;
 
 Route::laravext();
@@ -32,6 +33,10 @@ Route::middleware(['auth'])->group(function () {
     Route::get("clientes/{customer}", [CustomerController::class, 'show'])->name('clientes.customer');
 
     Route::laravext('veiculos');
+    Route::get("veiculos/cadastrar", [VehicleController::class, 'create'])->name('veiculos.cadastrar');
+    Route::get("veiculos/{vehicle}/editar", [VehicleController::class, 'edit'])->name('veiculos.vehicle.editar');
+    Route::get("veiculos/{vehicle}", [VehicleController::class, 'show'])->name('veiculos.vehicle');
+
     Route::laravext('reservas');
 });
 

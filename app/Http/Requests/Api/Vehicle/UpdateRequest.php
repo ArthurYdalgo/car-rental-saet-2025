@@ -27,7 +27,7 @@ class UpdateRequest extends FormRequest
             'brand_id' => ['sometimes', 'exists:brands,id'],
             'color_id' => ['sometimes', 'exists:colors,id'],
 
-            'type' => ['sometimes', 'string', 'max:255', Rule::in(VehicleService::$types)],
+            'type' => ['sometimes', 'string', 'max:255', Rule::in(array_keys(VehicleService::$types))],
             'license_plate' => ['sometimes', 'string', 'max:20'],
             'name' => ['sometimes', 'string', 'max:255'],
             'year' => ['sometimes', 'integer', 'min:1900', 'max:' . (date('Y') + 1)],

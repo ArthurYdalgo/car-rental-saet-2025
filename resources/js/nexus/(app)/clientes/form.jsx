@@ -46,7 +46,7 @@ export default function CustomerForm({ formHook, onSubmit = (e) => {}, ...props 
             {/* Section 1: Basic info (title on the RIGHT per your spec) */}
             <FormSection title="Informações Pessoais" titleWidth="md:w-48">
                 <FormRow cols={12}>
-                    <FormField span={6} error={formHook.errors.name} label="Nome" htmlFor="name" required>
+                    <FormField span={8} error={formHook.errors.name} label="Nome" htmlFor="name" required>
                         <Input
                             id="name"
                             name="name"
@@ -56,7 +56,7 @@ export default function CustomerForm({ formHook, onSubmit = (e) => {}, ...props 
                             onChange={(e) => formHook.setData('name', e.target.value)}
                         />
                     </FormField>
-                    <FormField span={6} error={formHook.errors.cpf} label="CPF" htmlFor="last" required>
+                    <FormField span={4} error={formHook.errors.cpf} label="CPF" htmlFor="last" required>
                         <CpfInput
                             id="cpf"
                             name="cpf"
@@ -143,12 +143,11 @@ export default function CustomerForm({ formHook, onSubmit = (e) => {}, ...props 
                             onChange={(e) => formHook.setData('address', { ...formHook.data.address, number: e.target.value })}
                         />
                     </FormField>
-                    <FormField span={4} error={formHook.errors['address.complement']} label="Complemento" htmlFor="address.complement" required>
+                    <FormField span={4} error={formHook.errors['address.complement']} label="Complemento" htmlFor="address.complement">
                         <Input
                             id="address.complement"
                             name="address.complement"
                             placeholder="Bloco E, Sala 306"
-                            required
                             value={formHook.data.address?.complement ?? ''}
                             onChange={(e) => formHook.setData('address', { ...formHook.data.address, complement: e.target.value })}
                         />

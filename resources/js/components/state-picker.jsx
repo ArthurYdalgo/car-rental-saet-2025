@@ -54,7 +54,7 @@ export default function StatePicker({
       </SelectTrigger>
       <SelectContent>
         {BRAZIL_STATES.map((state) => (
-          <SelectItem key={state.uf} value={state.uf}>
+          <SelectItem key={`state-picker-${state.uf}`} value={state.uf}>
             {state.name} ({state.uf})
           </SelectItem>
         ))}

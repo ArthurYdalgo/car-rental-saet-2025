@@ -7,11 +7,11 @@ use App\Models\Vehicle;
 class VehicleService
 {
     public static $types = [
-        'sedan',
-        'hatch',
-        'pickup',
-        'truck',
-        'van',
+        'sedan' => 'Sedan',
+        'hatchback' => 'Hatchback',
+        'pickup' => 'Pickup',
+        'truck' => 'Caminhão',
+        'van' => 'Van',
     ];
 
     public function __construct(public ?Vehicle $vehicle = null) {}

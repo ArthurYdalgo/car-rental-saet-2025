@@ -35,6 +35,8 @@ class Vehicle extends Model
         ];
     }
 
+    protected $appends = ['type_name'];
+
     #region Relationships
     public function brand()
     {
@@ -55,17 +57,24 @@ class Vehicle extends Model
     {
         return $this->belongsToMany(Customer::class, 'rentals');
     }
-    
+
     public function rentalsBetween($start_date, $end_date)
     {
         return $this->rentals()->between($start_date, $end_date);
     }
 
     #region Scopes
-    public function scopeAvailableBetween($query, $start_date, $end_date) {
-        return $query->whereDoesntHave('rentals', function($query) use ($start_date, $end_date){
+    public function scopeAvailableBetween($query, $start_date, $end_date)
+    {
+        return $query->whereDoesntHave('rentals', function ($query) use ($start_date, $end_date) {
             $query->between($start_date, $end_date)->whereNull('canceled_at');
         });
+    }
+
+    #region Getters and Setters
+    public function getTypeNameAttribute()
+    {
+        return VehicleService::$types[$this->type] ?? $this->type;
     }
 
     #region Methods

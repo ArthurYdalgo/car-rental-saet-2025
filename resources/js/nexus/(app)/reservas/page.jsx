@@ -85,9 +85,9 @@ export default function Dashboard() {
                                             <TextLink href={route('clientes.customer', {customer: rental.customer.id})}>{rental.customer.first_name}</TextLink>
                                         </TableCell>
                                         <TableCell>
-                                            <TextLink>
-                                                {rental.vehicle.name} ({rental.vehicle.color.name}){' '}
-                                                {rental.vehicle.license_plate}
+                                            <TextLink className="flex items-center gap-2">
+                                                {rental.vehicle.name} ({rental.vehicle.brand.name}){' '}
+                                                {rental.vehicle.license_plate} <div className="h-3 w-3 rounded" style={{ backgroundColor: rental.vehicle.color.hex, border: '1px solid #aaaaaa44' }}></div>
                                             </TextLink>
                                         </TableCell>
 
