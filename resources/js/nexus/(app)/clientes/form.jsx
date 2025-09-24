@@ -192,7 +192,7 @@ export default function CustomerForm({ formHook, onSubmit = (e) => {}, ...props 
                             name="address.state"
                             required
                             value={formHook.data.address?.state ?? ''}
-                            onChange={(e) => formHook.setData('address', { ...formHook.data.address, state: e.target.value })}
+                            onChange={(value) => formHook.setData('address', { ...formHook.data.address, state: value })}
                         />
                     </FormField>
                 </FormRow>

@@ -26,7 +26,7 @@ export default () => {
         axios.put(`/api/customers/${customer.id}`, body)
         .then((response) => {
             toast.success("Cliente atualizado com sucesso!");
-            // visit(route("clientes.customer", {customer: customer.id}));
+            visit(route("clientes.customer", {customer: customer.id}));
         })
         .catch((error) => {
             let response = error.response.data;
