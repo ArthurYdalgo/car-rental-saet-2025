@@ -26,6 +26,7 @@ class UpdateRequest extends FormRequest
             'vehicle_id' => ['sometimes', 'exists:vehicles,id'],
             'vehicle_price_per_day' => ['sometimes', 'numeric', 'min:0'],
             'price' => ['sometimes', 'numeric', 'min:0'],
+            'canceled_at' => ['nullable', 'date'],
             'paid_at' => ['nullable', 'date'],
             'start_date' => ['sometimes', 'date'],
             'end_date' => ['sometimes', 'date', 'after_or_equal:start_date'],

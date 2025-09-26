@@ -27,6 +27,7 @@ class StoreRequest extends FormRequest
             'vehicle_price_per_day' => ['required', 'numeric', 'min:0'],
             'price' => ['required', 'numeric', 'min:0'],
             'paid_at' => ['nullable', 'date'],
+            'canceled_at' => ['nullable', 'date'],
             'start_date' => ['required', 'date'],
             'end_date' => ['required', 'date', 'after_or_equal:start_date'],
             'payment_methods' => ['required', 'array'],

@@ -9,6 +9,7 @@ use App\Http\Resources\VehicleResource;
 use App\Models\Vehicle;
 use App\Services\VehicleService;
 use Illuminate\Http\Request;
+use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
 
 class VehicleController extends Controller
@@ -19,6 +20,17 @@ class VehicleController extends Controller
     public function index(Request $request)
     {
         $vehicles = QueryBuilder::for(Vehicle::class)
+            ->allowedFilters([
+                AllowedFilter::exact('brand_id'),
+                AllowedFilter::exact('color_id'),
+                AllowedFilter::callback('search', function ($query, $value) {
+                    $query->where(function ($query) use ($value) {
+                        $query->whereLike('name', "%{$value}%")
+                            ->orWhereLike('license_plate', "{$value}%")
+                            ->orWhere('year', $value);
+                    });
+                }),
+            ])
             ->allowedSorts([
                 'id',
                 'year',

@@ -15,7 +15,7 @@ class VehicleController extends Controller
         $colors = Color::all();
         $brands = Brand::all();
 
-        return nexus(props: compact('colors', 'brands'));
+        return nexus(props: compact('colors', 'brands'))->render();
     }
 
     public function show(Vehicle $vehicle)

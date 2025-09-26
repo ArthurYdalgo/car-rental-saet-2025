@@ -1,8 +1,13 @@
+import BrandPicker from '@/components/brand-picker';
+import ColorPicker from '@/components/color-picker';
+import Filter from '@/components/filter';
 import Money from '@/components/Money';
 import Number from '@/components/Number';
 import Table from '@/components/pagination/table';
 import TableSortableField from '@/components/pagination/table-sortable-field';
+import { TableBanner } from '@/components/table-header';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import { TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { useFilter } from '@/hooks/use-filter';
 import { useNonInitialEffect } from '@/hooks/use-non-initial-effect';
@@ -18,11 +23,11 @@ const breadcrumbs = [
 ];
 
 export default function Dashboard() {
+    const { filters, setFilter } = useFilter({});
+
     const [params, setParams] = useState({
         include: 'color,brand',
     });
-
-    const { filters, setFilter } = useFilter({});
 
     const refresh = () => {
         setParams({
@@ -51,7 +56,22 @@ export default function Dashboard() {
             }
         >
             <Head title="Veículos" />
-            <div className="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
+            <div className="flex h-full flex-col gap-4 rounded-xl p-4">
+                <TableBanner
+                    filterComponents={
+                        <>
+                            <Filter label={'Filtros'}>
+                                <Input placeholder="Buscar" value={filters.search} onChange={(e) => setFilter('search', e.target.value)} />
+                            </Filter>
+                            <Filter>
+                                <ColorPicker triggerClassName={'w-40'} value={filters.color_id ?? ''} onChange={(value) => setFilter('color_id', value)} />
+                            </Filter>
+                            <Filter>
+                                <BrandPicker triggerClassName={'w-48'} />
+                            </Filter>
+                        </>
+                    }
+                ></TableBanner>
                 <Table
                     endpoint={'/api/vehicles'}
                     params={params}

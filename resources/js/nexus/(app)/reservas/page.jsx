@@ -1,3 +1,4 @@
+import ColorPicker from '@/components/color-picker';
 import If from '@/components/if';
 import MomentDate from '@/components/moment-date';
 import Money from '@/components/money';
@@ -5,12 +6,16 @@ import Table from '@/components/pagination/table';
 import TableSortableField from '@/components/pagination/table-sortable-field';
 import TextLink from '@/components/text-link';
 import { Button } from '@/components/ui/button';
+import { LoadingButton } from '@/components/ui/loading-button';
 import { TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { useFilter } from '@/hooks/use-filter';
 import { useNonInitialEffect } from '@/hooks/use-non-initial-effect';
 import AppLayout from '@/layouts/app-layout';
 import { Head, Link } from '@laravext/react';
+import axios from 'axios';
+import { set } from 'date-fns';
 import { useState } from 'react';
+import { toast } from 'sonner';
 
 const breadcrumbs = [
     {
@@ -21,6 +26,7 @@ const breadcrumbs = [
 
 export default function Dashboard() {
     const { filters, setFilter } = useFilter({});
+    const [processing, setProcessing] = useState(null);
 
     const [params, setParams] = useState({
         include: 'vehicle,customer',
@@ -42,9 +48,28 @@ export default function Dashboard() {
         return () => clearTimeout(delayDebounceFn);
     }, [filters]);
 
+    const handleCancelOrRestore = (rental) => {
+        setProcessing(rental.id);
+
+        axios.put(`/api/rentals/${rental.id}`, {
+            canceled_at: rental.canceled_at ? null : new Date().toISOString(),
+        })
+        .then((response => {
+            toast.success(`Reserva ${rental.canceled_at ? 'restaurada' : 'cancelada'} com sucesso!`);
+            refresh();
+        }))
+        .catch((error) => {
+            toast.error(`Erro ao ${rental.canceled_at ? 'restaurar' : 'cancelar'} a reserva.`);
+        }).finally(() => {
+            setProcessing(null);
+        });
+    };
+
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Reservas" />
+            
+            
             <div className="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
                 <Table
                     endpoint={'/api/rentals'}
@@ -82,12 +107,17 @@ export default function Dashboard() {
                                     <TableRow key={rental.id}>
                                         <TableCell>{rental.id}</TableCell>
                                         <TableCell>
-                                            <TextLink href={route('clientes.customer', {customer: rental.customer.id})}>{rental.customer.first_name}</TextLink>
+                                            <TextLink href={route('clientes.customer', { customer: rental.customer.id })}>
+                                                {rental.customer.first_name}
+                                            </TextLink>
                                         </TableCell>
                                         <TableCell>
-                                            <TextLink className="flex items-center gap-2">
-                                                {rental.vehicle.name} ({rental.vehicle.brand.name}){' '}
-                                                {rental.vehicle.license_plate} <div className="h-3 w-3 rounded" style={{ backgroundColor: rental.vehicle.color.hex, border: '1px solid #aaaaaa44' }}></div>
+                                            <TextLink href={route('veiculos.vehicle', { vehicle: rental.vehicle.id })} className="flex items-center gap-2">
+                                                {rental.vehicle.name} ({rental.vehicle.brand.name}) {rental.vehicle.license_plate}{' '}
+                                                <div
+                                                    className="h-3 w-3 rounded"
+                                                    style={{ backgroundColor: rental.vehicle.color.hex, border: '1px solid #aaaaaa44' }}
+                                                ></div>
                                             </TextLink>
                                         </TableCell>
 
@@ -113,15 +143,15 @@ export default function Dashboard() {
                                                 <Link href={`/reservas/${rental.id}/editar`}>Editar</Link>
                                             </Button>
                                             <If condition={!rental.canceled_at}>
-                                                <Button variant="destructive" size="xs">
+                                                <LoadingButton onClick={() => handleCancelOrRestore(rental)} loading={rental.id == processing} variant="destructive" size="xs">
                                                     Cancelar
-                                                </Button>
+                                                </LoadingButton>
                                             </If>
 
                                             <If condition={rental.canceled_at}>
-                                                <Button variant="orange" size="xs">
+                                                <LoadingButton onClick={() => handleCancelOrRestore(rental)} loading={rental.id == processing} variant="orange" size="xs">
                                                     Restaurar
-                                                </Button>
+                                                </LoadingButton>
                                             </If>
                                         </TableCell>
                                     </TableRow>
