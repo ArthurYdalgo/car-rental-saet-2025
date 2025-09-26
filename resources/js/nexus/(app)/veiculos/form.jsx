@@ -48,6 +48,7 @@ export default function CustomerForm({ formHook, onSubmit = (e) => {}, ...props 
                     <BrandPicker
                         id="brand_id"
                         name="brand_id"
+                        buttonClassName="w-full"
                         required
                         value={formHook.data.brand_id ? `${formHook.data.brand_id}` : ''}
                         onChange={(value) => formHook.setData('brand_id', value)}

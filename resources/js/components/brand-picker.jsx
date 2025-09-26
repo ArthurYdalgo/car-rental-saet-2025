@@ -1,22 +1,16 @@
-// /components/StatePicker.tsx
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { ComboBox, ComboBoxItem } from '@/components/ui/combo-box'; // Assuming ComboBox is in this path
 import { nexusProps } from '@laravext/react';
 
-export default function BrandPicker({ value, onChange, placeholder = 'Selecione a marca', selectClassName, triggerClassName, disabled, id, name }) {
+export default function BrandPicker({ value, onChange, placeholder = 'Selecione a marca', buttonClassName, disabled, id, name }) {
     const { brands } = nexusProps();
 
     return (
-        <Select value={value} onValueChange={onChange} className={selectClassName} disabled={disabled} name={name}>
-            <SelectTrigger className={triggerClassName} id={id}>
-                <SelectValue placeholder={placeholder} />
-            </SelectTrigger>
-            <SelectContent>
-                {brands.map((brand) => (
-                    <SelectItem key={`brand-picker-${brand.id}`} value={`${brand.id}`}>
-                        <div className="flex items-center gap-2">{brand.name}</div>
-                    </SelectItem>
-                ))}
-            </SelectContent>
-        </Select>
+        <ComboBox value={value} onChange={onChange} placeholder={placeholder} disabled={disabled} buttonClassName={buttonClassName}>
+            {brands.map((brand) => (
+                <ComboBoxItem key={`brand-picker-${brand.id}`} value={`${brand.id}`} onSelect={onChange} selectedValue={value}>
+                    <div className="flex items-center gap-2">{brand.name}</div>
+                </ComboBoxItem>
+            ))}
+        </ComboBox>
     );
 }

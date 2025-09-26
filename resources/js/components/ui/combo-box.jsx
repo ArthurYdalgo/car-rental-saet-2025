@@ -47,7 +47,10 @@ export function ComboBox({
       <PopoverContent className="w-[200px] p-0">
         <Command>
           {!disableSearch && (
-            <CommandInput placeholder={searchPlaceholder} className="h-9" />
+            <CommandInput
+              placeholder={searchPlaceholder}
+              className="h-9 border-2 border-none border-input rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-0 focus:border-input"
+            />
           )}
           <CommandList>
             <CommandEmpty>No options found.</CommandEmpty>
