@@ -21,7 +21,9 @@ export function ComboBox({
   value,
   onChange,
   disableSearch = false,
-  searchPlaceholder = "Search",
+  searchPlaceholder = "Search...",
+  disabled = false,
+  placeholder = "Select an option...",
 }) {
   const [open, setOpen] = useState(false);
 
@@ -33,10 +35,11 @@ export function ComboBox({
           role="combobox"
           aria-expanded={open}
           className="w-[200px] justify-between"
+          disabled={disabled}
         >
           {value
             ? options.find((option) => option.value === value)?.label
-            : "Select option..."}
+            : placeholder}
           <ChevronsUpDown className="opacity-50" />
         </Button>
       </PopoverTrigger>
@@ -58,12 +61,9 @@ export function ComboBox({
                   }}
                 >
                   {option.label}
-                  <Check
-                    className={cn(
-                      "ml-auto",
-                      value === option.value ? "opacity-100" : "opacity-0"
-                    )}
-                  />
+                  {value === option.value && (
+                    <Check className="ml-auto opacity-100" />
+                  )}
                 </CommandItem>
               ))}
             </CommandGroup>
@@ -71,5 +71,16 @@ export function ComboBox({
         </Command>
       </PopoverContent>
     </Popover>
+  );
+}
+
+export function ComboBoxItem({ children, value, onSelect }) {
+  return (
+    <CommandItem
+      value={value}
+      onSelect={onSelect}
+    >
+      {children}
+    </CommandItem>
   );
 }

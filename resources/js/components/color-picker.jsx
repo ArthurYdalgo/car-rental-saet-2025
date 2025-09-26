@@ -1,24 +1,27 @@
-// /components/StatePicker.tsx
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { nexusProps } from '@laravext/react';
+import { nexusProps } from "@laravext/react";
+import { ComboBox, ComboBoxItem } from "./ui/combo-box";
 
-export default function ColorPicker({ value, onChange, placeholder = 'Selecione a cor', selectClassName, triggerClassName, disabled, id, name }) {
+
+export default function ColorPicker({ value, onChange, placeholder = 'Selecione a cor', disabled, id, name, selectClassName, triggerClassName }) {
+    // Get color options from nexusProps (assuming nexusProps is available)
     const { colors } = nexusProps();
 
     return (
-        <Select value={value} className={selectClassName} onValueChange={onChange} disabled={disabled} name={name}>
-            <SelectTrigger className={triggerClassName} id={id}>
-                <SelectValue placeholder={placeholder} />
-            </SelectTrigger>
-            <SelectContent>
-                {colors.map((color) => (
-                    <SelectItem key={`color-picker-${color.id}`} value={`${color.id}`}>
-                        <div className="flex items-center gap-2">
-                            {color.name} <div className="h-3 w-3 rounded" style={{ backgroundColor: color.hex, border: '1px solid #aaaaaa44' }}></div>
-                        </div>
-                    </SelectItem>
-                ))}
-            </SelectContent>
-        </Select>
+        <ComboBox
+            value={value}
+            onChange={onChange}
+            placeholder={placeholder}
+            disabled={disabled}
+            selectClassName={selectClassName}
+            triggerClassName={triggerClassName}
+        >
+            {colors.map((color) => (
+                <ComboBoxItem key={`color-picker-${color.id}`} value={color.id} onSelect={(value) => onChange(value)}>
+                    <div className="flex items-center gap-2">
+                        {color.name} <div className="h-3 w-3 rounded" style={{ backgroundColor: color.hex, border: '1px solid #aaaaaa44' }}></div>
+                    </div>
+                </ComboBoxItem>
+            ))}
+        </ComboBox>
     );
 }
