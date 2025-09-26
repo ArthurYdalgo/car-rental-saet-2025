@@ -1,11 +1,13 @@
-import ColorPicker from '@/components/color-picker';
+import Filter from '@/components/filter';
 import If from '@/components/if';
 import MomentDate from '@/components/moment-date';
 import Money from '@/components/money';
 import Table from '@/components/pagination/table';
 import TableSortableField from '@/components/pagination/table-sortable-field';
+import { TableBanner } from '@/components/table-header';
 import TextLink from '@/components/text-link';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import { LoadingButton } from '@/components/ui/loading-button';
 import { TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { useFilter } from '@/hooks/use-filter';
@@ -13,7 +15,6 @@ import { useNonInitialEffect } from '@/hooks/use-non-initial-effect';
 import AppLayout from '@/layouts/app-layout';
 import { Head, Link } from '@laravext/react';
 import axios from 'axios';
-import { set } from 'date-fns';
 import { useState } from 'react';
 import { toast } from 'sonner';
 
@@ -51,26 +52,36 @@ export default function Dashboard() {
     const handleCancelOrRestore = (rental) => {
         setProcessing(rental.id);
 
-        axios.put(`/api/rentals/${rental.id}`, {
-            canceled_at: rental.canceled_at ? null : new Date().toISOString(),
-        })
-        .then((response => {
-            toast.success(`Reserva ${rental.canceled_at ? 'restaurada' : 'cancelada'} com sucesso!`);
-            refresh();
-        }))
-        .catch((error) => {
-            toast.error(`Erro ao ${rental.canceled_at ? 'restaurar' : 'cancelar'} a reserva.`);
-        }).finally(() => {
-            setProcessing(null);
-        });
+        axios
+            .put(`/api/rentals/${rental.id}`, {
+                canceled_at: rental.canceled_at ? null : new Date().toISOString(),
+            })
+            .then((response) => {
+                toast.success(`Reserva ${rental.canceled_at ? 'restaurada' : 'cancelada'} com sucesso!`);
+                refresh();
+            })
+            .catch((error) => {
+                toast.error(`Erro ao ${rental.canceled_at ? 'restaurar' : 'cancelar'} a reserva.`);
+            })
+            .finally(() => {
+                setProcessing(null);
+            });
     };
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Reservas" />
-            
-            
-            <div className="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
+
+            <div className="flex h-full flex-col gap-4 rounded-xl p-4">
+                <TableBanner
+                    filterComponents={
+                        <>
+                            <Filter label={'Filtros'}>
+                                <Input placeholder="Buscar" value={filters.search} onChange={(e) => setFilter('search', e.target.value)} />
+                            </Filter>
+                        </>
+                    }
+                ></TableBanner>
                 <Table
                     endpoint={'/api/rentals'}
                     params={params}
@@ -112,7 +123,10 @@ export default function Dashboard() {
                                             </TextLink>
                                         </TableCell>
                                         <TableCell>
-                                            <TextLink href={route('veiculos.vehicle', { vehicle: rental.vehicle.id })} className="flex items-center gap-2">
+                                            <TextLink
+                                                href={route('veiculos.vehicle', { vehicle: rental.vehicle.id })}
+                                                className="flex items-center gap-2"
+                                            >
                                                 {rental.vehicle.name} ({rental.vehicle.brand.name}) {rental.vehicle.license_plate}{' '}
                                                 <div
                                                     className="h-3 w-3 rounded"
@@ -143,13 +157,27 @@ export default function Dashboard() {
                                                 <Link href={`/reservas/${rental.id}/editar`}>Editar</Link>
                                             </Button>
                                             <If condition={!rental.canceled_at}>
-                                                <LoadingButton onClick={() => handleCancelOrRestore(rental)} loading={rental.id == processing} variant="destructive" size="xs">
+                                                <LoadingButton
+                                                    onClick={() => handleCancelOrRestore(rental)}
+                                                    loading={rental.id == processing}
+                                                    variant="destructive"
+                                                    includeChildrenWhenLoading={false}
+                                                    className='min-w-20'
+                                                    size="xs"
+                                                >
                                                     Cancelar
                                                 </LoadingButton>
                                             </If>
 
                                             <If condition={rental.canceled_at}>
-                                                <LoadingButton onClick={() => handleCancelOrRestore(rental)} loading={rental.id == processing} variant="orange" size="xs">
+                                                <LoadingButton
+                                                    onClick={() => handleCancelOrRestore(rental)}
+                                                    loading={rental.id == processing}
+                                                    variant="orange"
+                                                    includeChildrenWhenLoading={false}
+                                                    className='min-w-20'
+                                                    size="xs"
+                                                >
                                                     Restaurar
                                                 </LoadingButton>
                                             </If>

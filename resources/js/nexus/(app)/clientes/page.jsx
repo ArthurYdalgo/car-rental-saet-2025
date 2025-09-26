@@ -1,7 +1,11 @@
+import ColorPicker from '@/components/color-picker';
+import Filter from '@/components/filter';
 import MomentDateTime from '@/components/moment-date-time';
 import Table from '@/components/pagination/table';
 import TableSortableField from '@/components/pagination/table-sortable-field';
+import { TableBanner } from '@/components/table-header';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import { TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { useFilter } from '@/hooks/use-filter';
 import { useNonInitialEffect } from '@/hooks/use-non-initial-effect';
@@ -49,7 +53,16 @@ export default function Dashboard() {
             }
         >
             <Head title="Clientes" />
-            <div className="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
+            <div className="flex h-full flex-col gap-4 rounded-xl p-4">
+                <TableBanner
+                    filterComponents={
+                        <>
+                            <Filter label={'Filtros'}>
+                                <Input placeholder="Buscar" value={filters.search} onChange={(e) => setFilter('search', e.target.value)} />
+                            </Filter>
+                        </>
+                    }
+                ></TableBanner>
                 <Table
                     endpoint={'/api/customers'}
                     params={params}

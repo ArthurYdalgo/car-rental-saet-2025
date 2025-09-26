@@ -10,6 +10,7 @@ use App\Models\Customer;
 use App\Services\CustomerService;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\AllowedInclude;
 use Spatie\QueryBuilder\QueryBuilder;
 
@@ -21,6 +22,16 @@ class CustomerController extends Controller
     public function index(Request $request)
     {
         $customers = QueryBuilder::for(Customer::class)
+            ->allowedFilters([
+                AllowedFilter::callback('search', function ($query, $value) {
+                    $query->where(function ($query) use ($value) {
+                        $query->whereAny(['name', 'email', 'license_number'], 'LIKE', "%{$value}%")
+                            ->orWhereHas('phone', function ($query) use ($value) {
+                                $query->where('number', 'LIKE', "%{$value}%");
+                            });
+                    });
+                }),
+            ])
             ->allowedIncludes([
                 'phone',
                 'address',

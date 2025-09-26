@@ -1,5 +1,6 @@
 import BrandPicker from '@/components/brand-picker';
 import ColorPicker from '@/components/color-picker';
+import DatePicker from '@/components/date-picker';
 import Filter from '@/components/filter';
 import Money from '@/components/Money';
 import Number from '@/components/Number';
@@ -8,6 +9,7 @@ import TableSortableField from '@/components/pagination/table-sortable-field';
 import { TableBanner } from '@/components/table-header';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { Separator } from '@/components/ui/separator';
 
 import { TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { useFilter } from '@/hooks/use-filter';
@@ -69,11 +71,13 @@ export default function Dashboard() {
                             </Filter>
                             <Filter>
                                 <BrandPicker triggerClassName={'w-48'} value={filters.brand_id ?? ''} onChange={(value) => setFilter('brand_id', value)} />
-                                {/* <MultiSelect  options={[
-                                    { label: 'Ford', value: '1' },
-                                    { label: 'Chevrolet', value: '2' },
-                                    { label: 'Toyota', value: '3' },
-                                ]} /> */}
+                            </Filter>
+                            <Separator orientation="vertical" />
+                            <Filter label={"Disponível entre"}>
+                                <DatePicker label=''/>
+                            </Filter>
+                            <Filter label={"e"}>
+                                <DatePicker label='' />
                             </Filter>
                         </>
                     }
