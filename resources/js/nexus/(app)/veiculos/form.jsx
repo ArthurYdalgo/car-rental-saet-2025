@@ -58,6 +58,7 @@ export default function CustomerForm({ formHook, onSubmit = (e) => {}, ...props 
                     <ColorPicker
                         id="color_id"
                         name="color_id"
+                        buttonClassName="w-full"
                         required
                         value={formHook.data.color_id ? `${formHook.data.color_id}` : ''}
                         onChange={(value) => {

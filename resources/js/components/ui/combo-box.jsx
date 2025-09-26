@@ -17,13 +17,14 @@ import {
 } from "@/components/ui/popover";
 
 export function ComboBox({
-  options,
   value,
   onChange,
   disableSearch = false,
   searchPlaceholder = "Search...",
   disabled = false,
+  buttonClassName = "",
   placeholder = "Select an option...",
+  children, // Use children prop for options
 }) {
   const [open, setOpen] = useState(false);
 
@@ -34,11 +35,11 @@ export function ComboBox({
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          className="w-[200px] justify-between"
+          className={"w-[200px] justify-between " + buttonClassName}
           disabled={disabled}
         >
           {value
-            ? options.find((option) => option.value === value)?.label
+            ? children.find((child) => child.props.value === value)?.props.children
             : placeholder}
           <ChevronsUpDown className="opacity-50" />
         </Button>
@@ -51,21 +52,7 @@ export function ComboBox({
           <CommandList>
             <CommandEmpty>No options found.</CommandEmpty>
             <CommandGroup>
-              {options.map((option) => (
-                <CommandItem
-                  key={option.value}
-                  value={option.value}
-                  onSelect={(currentValue) => {
-                    onChange(currentValue === value ? "" : currentValue);
-                    setOpen(false);
-                  }}
-                >
-                  {option.label}
-                  {value === option.value && (
-                    <Check className="ml-auto opacity-100" />
-                  )}
-                </CommandItem>
-              ))}
+              {children} {/* Render the children directly */}
             </CommandGroup>
           </CommandList>
         </Command>
@@ -74,13 +61,21 @@ export function ComboBox({
   );
 }
 
-export function ComboBoxItem({ children, value, onSelect }) {
+export function ComboBoxItem({ children, value, onSelect, selectedValue }) {
   return (
     <CommandItem
       value={value}
-      onSelect={onSelect}
+      onSelect={() => onSelect(value === selectedValue ? "" : value)} // Toggle selection
     >
-      {children}
+      <div className="flex items-center justify-between w-full">
+        {children}
+        <Check
+          className={cn(
+            "ml-auto",
+            selectedValue === value ? "opacity-100" : "opacity-0"
+          )}
+        />
+      </div>
     </CommandItem>
   );
 }
