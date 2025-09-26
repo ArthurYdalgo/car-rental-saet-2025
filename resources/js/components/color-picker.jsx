@@ -1,10 +1,20 @@
-import { nexusProps } from "@laravext/react";
-import { ComboBox, ComboBoxItem } from "./ui/combo-box";
-
+import { nexusProps } from '@laravext/react';
+import { ComboBox } from './ui/combo-box';
 
 export default function ColorPicker({ value, onChange, placeholder = 'Selecione a cor', disabled, id, name, buttonClassName }) {
-    // Get color options from nexusProps (assuming nexusProps is available)
-    const { colors } = nexusProps();
+    const { colors } = nexusProps(); // Get color options from nexusProps
+
+    // Map colors into the required format for the Combobox
+    const colorItems = colors.map((color) => ({
+        value: `${color.id}`, // Color ID as value
+        label: (
+            <div className="flex items-center gap-2">
+                {color.name}
+                <div className="h-3 w-3 rounded" style={{ backgroundColor: color.hex, border: '1px solid #aaaaaa44' }} />
+            </div>
+        ),
+        keywords: [color.name],
+    }));
 
     return (
         <ComboBox
@@ -13,19 +23,7 @@ export default function ColorPicker({ value, onChange, placeholder = 'Selecione 
             placeholder={placeholder}
             disabled={disabled}
             buttonClassName={buttonClassName}
-        >
-            {colors.map((color) => (
-                <ComboBoxItem
-                    key={`color-picker-${color.id}`}
-                    value={`${color.id}`} // Use color ID as the value
-                    selectedValue={value} // Pass selected value to ComboBoxItem
-                    onSelect={(selectedValue) => onChange(selectedValue)} // Pass selected value to onChange
-                >
-                    <div className="flex items-center gap-2">
-                        {color.name} <div className="h-3 w-3 rounded" style={{ backgroundColor: color.hex, border: '1px solid #aaaaaa44' }}></div>
-                    </div>
-                </ComboBoxItem>
-            ))}
-        </ComboBox>
+            items={colorItems} // Pass color items to the Combobox
+        />
     );
 }

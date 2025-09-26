@@ -8,6 +8,7 @@ import TableSortableField from '@/components/pagination/table-sortable-field';
 import { TableBanner } from '@/components/table-header';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+
 import { TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { useFilter } from '@/hooks/use-filter';
 import { useNonInitialEffect } from '@/hooks/use-non-initial-effect';
@@ -68,6 +69,11 @@ export default function Dashboard() {
                             </Filter>
                             <Filter>
                                 <BrandPicker triggerClassName={'w-48'} />
+                                {/* <MultiSelect  options={[
+                                    { label: 'Ford', value: '1' },
+                                    { label: 'Chevrolet', value: '2' },
+                                    { label: 'Toyota', value: '3' },
+                                ]} /> */}
                             </Filter>
                         </>
                     }

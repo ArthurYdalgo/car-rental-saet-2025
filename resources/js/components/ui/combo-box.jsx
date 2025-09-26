@@ -1,32 +1,12 @@
-import React, { useState } from "react";
-import { Check, ChevronsUpDown } from "lucide-react";
-import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-  CommandList,
-} from "@/components/ui/command";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
+import React, { useState } from "react"
+import { Check, ChevronsUpDown } from "lucide-react"
 
-export function ComboBox({
-  value,
-  onChange,
-  disableSearch = false,
-  searchPlaceholder = "Search...",
-  disabled = false,
-  buttonClassName = "",
-  placeholder = "Select an option...",
-  children, // Use children prop for options
-}) {
-  const [open, setOpen] = useState(false);
+import { Button } from "@/components/ui/button"
+import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command"
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
+
+export function ComboBox ({ items, value, onChange, placeholder = "Select..." }) {
+  const [open, setOpen] = useState(false)
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -35,50 +15,41 @@ export function ComboBox({
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          className={"w-[200px] justify-between " + buttonClassName}
-          disabled={disabled}
+          className="w-[200px] justify-between"
         >
           {value
-            ? children.find((child) => child.props.value === value)?.props.children
+            ? items.find((item) => item.value === value)?.label
             : placeholder}
           <ChevronsUpDown className="opacity-50" />
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-[200px] p-0">
         <Command>
-          {!disableSearch && (
-            <CommandInput
-              placeholder={searchPlaceholder}
-              className="h-9 border-2 border-none border-input rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-0 focus:border-input"
-            />
-          )}
+          <CommandInput placeholder="Search..." className="h-9 focus:border-none border-none focus:border-0 text-input " />
           <CommandList>
-            <CommandEmpty>No options found.</CommandEmpty>
+            <CommandEmpty>No item found.</CommandEmpty>
             <CommandGroup>
-              {children} {/* Render the children directly */}
+              {items.map((item) => (
+                <CommandItem
+                  key={item.value}
+                  value={item.value}
+                  keywords={typeof item.label === "string" ? [item.label, ...(item.keywords ?? [])] : (item.keywords ?? [])}
+                  onSelect={(currentValue) => {
+                    const newValue = currentValue === value ? "" : currentValue
+                    onChange(newValue)
+                    setOpen(false)
+                  }}
+                >
+                  {item.label}
+                  <Check
+                    className={`ml-auto ${value === item.value ? "opacity-100" : "opacity-0"}`}
+                  />
+                </CommandItem>
+              ))}
             </CommandGroup>
           </CommandList>
         </Command>
       </PopoverContent>
     </Popover>
-  );
-}
-
-export function ComboBoxItem({ children, value, onSelect, selectedValue }) {
-  return (
-    <CommandItem
-      value={value}
-      onSelect={() => onSelect(value === selectedValue ? "" : value)} // Toggle selection
-    >
-      <div className="flex items-center justify-between w-full">
-        {children}
-        <Check
-          className={cn(
-            "ml-auto",
-            selectedValue === value ? "opacity-100" : "opacity-0"
-          )}
-        />
-      </div>
-    </CommandItem>
-  );
+  )
 }
