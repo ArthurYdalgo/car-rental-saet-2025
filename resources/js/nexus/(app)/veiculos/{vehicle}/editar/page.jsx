@@ -22,15 +22,15 @@ export default () => {
 
         setProcessing(true);
 
-        axios.put(`/api/customers/${customer.id}`, body)
+        axios.put(`/api/vehicles/${vehicle.id}`, body)
         .then((response) => {
             toast.success("Cliente atualizado com sucesso!");
-            visit(route("clientes.customer", {customer: customer.id}));
+            visit(route("veiculos.vehicle", {vehicle: vehicle.id}));
         })
         .catch((error) => {
             let response = error.response.data;
             console.log(response);
-            let message = response?.message ?? "Erro ao atualizar cliente.";
+            let message = response?.message ?? "Erro ao atualizar veículo.";
 
             toast.error(message);
             setErrors(response?.errors);

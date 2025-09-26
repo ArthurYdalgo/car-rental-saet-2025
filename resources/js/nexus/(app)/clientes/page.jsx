@@ -44,7 +44,7 @@ export default function Dashboard() {
             breadcrumbs={breadcrumbs}
             actions={
                 <Button size="xs" asChild>
-                    <Link href={route('clientes.cadastrar')}>Cadastrar Novo Cliente</Link>
+                    <Link href={route('clientes.cadastrar')}>Cadastrar</Link>
                 </Button>
             }
         >

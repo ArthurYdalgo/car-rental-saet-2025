@@ -91,6 +91,7 @@ export default function CustomerForm({ formHook, onSubmit = (e) => {}, ...props 
                 <FormField span={4} error={formHook.errors.trunk_capacity} label="Capacidade do Porta-Malas" htmlFor="trunk_capacity" required>
                     <Input
                         id="trunk_capacity"
+                        step={1}
                         name="trunk_capacity"
                         type="number"
                         required
@@ -98,7 +99,7 @@ export default function CustomerForm({ formHook, onSubmit = (e) => {}, ...props 
                         onChange={(e) => formHook.setData('trunk_capacity', e.target.value)}
                     />
                 </FormField>
-                <FormField span={4} error={formHook.errors.trunk_capacity} label="Capacidade do Porta-Malas" htmlFor="trunk_capacity" required>
+                <FormField span={4} error={formHook.errors.trunk_capacity} label="Preço por dia" htmlFor="price" required>
                     <CurrencyInput
                         required
                         onChangeInput={(value) => {

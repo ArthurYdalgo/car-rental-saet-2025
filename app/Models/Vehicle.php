@@ -29,7 +29,7 @@ class Vehicle extends Model
     {
         return [
             'price_per_day' => 'decimal:2',
-            'trunk_capacity' => 'decimal:2',
+            'trunk_capacity' => 'integer',
             'seats' => 'integer',
             'year' => 'integer',
         ];
