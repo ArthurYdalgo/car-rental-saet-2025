@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button"
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 
-export function ComboBox ({ items, value, onChange, placeholder = "Select..." }) {
+export function ComboBox ({ items, value, onChange, placeholder = "Select...", searchPlaceholder = "Search...", buttonClassName = "" }) {
   const [open, setOpen] = useState(false)
 
   return (
@@ -15,7 +15,7 @@ export function ComboBox ({ items, value, onChange, placeholder = "Select..." })
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          className="w-[200px] justify-between"
+          className={"w-[200px] justify-between " + buttonClassName}
         >
           {value
             ? items.find((item) => item.value === value)?.label
@@ -25,7 +25,7 @@ export function ComboBox ({ items, value, onChange, placeholder = "Select..." })
       </PopoverTrigger>
       <PopoverContent className="w-[200px] p-0">
         <Command>
-          <CommandInput placeholder="Search..." className="h-9 focus:border-none border-none focus:border-0 text-input " />
+          <CommandInput placeholder={searchPlaceholder} className="h-9 focus:border-none border-none focus:outline-none outline-none focus:ring-0 focus:border-transparent text-input " />
           <CommandList>
             <CommandEmpty>No item found.</CommandEmpty>
             <CommandGroup>

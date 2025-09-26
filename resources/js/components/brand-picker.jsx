@@ -6,8 +6,7 @@ export default function BrandPicker({
   value,
   onChange,
   placeholder = "Selecione a marca",
-  selectClassName,
-  triggerClassName,
+  buttonClassName,
   disabled,
   id,
   name,
@@ -26,7 +25,7 @@ export default function BrandPicker({
       onChange={onChange}
       placeholder={placeholder}
       disabled={disabled}
-      buttonClassName={triggerClassName} // You can apply the trigger class here
+      buttonClassName={buttonClassName} // You can apply the trigger class here
       items={brandItems} // Pass brand items to the Combobox
     />
   )

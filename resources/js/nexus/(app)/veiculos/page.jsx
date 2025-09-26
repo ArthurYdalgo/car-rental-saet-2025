@@ -68,7 +68,7 @@ export default function Dashboard() {
                                 <ColorPicker triggerClassName={'w-40'} value={filters.color_id ?? ''} onChange={(value) => setFilter('color_id', value)} />
                             </Filter>
                             <Filter>
-                                <BrandPicker triggerClassName={'w-48'} />
+                                <BrandPicker triggerClassName={'w-48'} value={filters.brand_id ?? ''} onChange={(value) => setFilter('brand_id', value)} />
                                 {/* <MultiSelect  options={[
                                     { label: 'Ford', value: '1' },
                                     { label: 'Chevrolet', value: '2' },
@@ -86,6 +86,7 @@ export default function Dashboard() {
                             <TableRow>
                                 <TableHead>ID</TableHead>
                                 <TableHead>Nome</TableHead>
+                                <TableHead>Marca</TableHead>
                                 <TableHead>Placa</TableHead>
                                 <TableHead>Cor</TableHead>
                                 <TableHead>
@@ -120,6 +121,7 @@ export default function Dashboard() {
                                     <TableRow key={vehicle.id}>
                                         <TableCell>{vehicle.id}</TableCell>
                                         <TableCell>{vehicle.name}</TableCell>
+                                        <TableCell>{vehicle.brand.name}</TableCell>
                                         <TableCell>{vehicle.license_plate}</TableCell>
                                         <TableCell className="flex items-center gap-2">
                                             {vehicle.color.name}{' '}
