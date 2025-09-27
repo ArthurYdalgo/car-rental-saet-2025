@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\QueryBuilder\Filters\Customer\Search;
 use App\Http\Requests\Api\Customer\StoreRequest;
 use App\Http\Requests\Api\Customer\UpdateRequest;
 use App\Http\Resources\CustomerResource;
@@ -23,14 +24,7 @@ class CustomerController extends Controller
     {
         $customers = QueryBuilder::for(Customer::class)
             ->allowedFilters([
-                AllowedFilter::callback('search', function ($query, $value) {
-                    $query->where(function ($query) use ($value) {
-                        $query->whereAny(['name', 'email', 'license_number'], 'LIKE', "%{$value}%")
-                            ->orWhereHas('phone', function ($query) use ($value) {
-                                $query->where('number', 'LIKE', "%{$value}%");
-                            });
-                    });
-                }),
+                AllowedFilter::callback('search', new Search),
             ])
             ->allowedIncludes([
                 'phone',

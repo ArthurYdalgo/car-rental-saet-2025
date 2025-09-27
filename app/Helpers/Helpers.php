@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Http;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Cache;
 use Symfony\Component\Console\Output\ConsoleOutput;
+use Illuminate\Support\Facades\Date;
 
 if (!function_exists('isEnvDevelopment')) {
     /**
@@ -110,6 +111,16 @@ if (!function_exists('searchZipCode')) {
                 'zip_code' => $response['cep'],
             ];
         });
+    }
+}
+
+if (!function_exists('carbon')) {
+    /**
+     * @return \Carbon\Carbon
+     */
+    function carbon($date = null, $timezone = null)
+    {
+        return Date::parse($date, $timezone);
     }
 }
 

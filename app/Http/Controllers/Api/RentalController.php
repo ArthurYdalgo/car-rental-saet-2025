@@ -3,12 +3,14 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\QueryBuilder\Filters\Rental\Search;
 use App\Http\Requests\Api\Rental\StoreRequest;
 use App\Http\Requests\Api\Rental\UpdateRequest;
 use App\Http\Resources\RentalResource;
 use App\Models\Rental;
 use App\Services\RentalService;
 use Illuminate\Http\Request;
+use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\AllowedInclude;
 use Spatie\QueryBuilder\QueryBuilder;
 
@@ -20,20 +22,23 @@ class RentalController extends Controller
     public function index(Request $request)
     {
         $rentals = QueryBuilder::for(Rental::class)
-        ->allowedIncludes([
-            'customer',
-            AllowedInclude::callback('vehicle', function ($query) {
-                $query->with(['color', 'brand']);
-            }),
-        ])
-        ->allowedSorts([
-            'start_date',
-            'end_date',
-            'price',
-            'paid_at',
-            'canceled_at',
-        ])
-        ->paginate(min($request->query('per_page', 15), 100));
+            ->allowedFilters([
+                AllowedFilter::custom('search', new Search),
+            ])
+            ->allowedIncludes([
+                'customer',
+                AllowedInclude::callback('vehicle', function ($query) {
+                    $query->with(['color', 'brand']);
+                }),
+            ])
+            ->allowedSorts([
+                'start_date',
+                'end_date',
+                'price',
+                'paid_at',
+                'canceled_at',
+            ])
+            ->paginate(min($request->query('per_page', 15), 100));
 
         return RentalResource::collection($rentals);
     }

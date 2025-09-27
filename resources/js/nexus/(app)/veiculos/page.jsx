@@ -15,6 +15,7 @@ import { TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/compon
 import { useFilter } from '@/hooks/use-filter';
 import { useNonInitialEffect } from '@/hooks/use-non-initial-effect';
 import AppLayout from '@/layouts/app-layout';
+import { cn, dateToDateString } from '@/lib/utils';
 import { Head, Link } from '@laravext/react';
 import { useState } from 'react';
 
@@ -26,7 +27,8 @@ const breadcrumbs = [
 ];
 
 export default function Dashboard() {
-    const { filters, setFilter } = useFilter({});
+    const { filters, setFilter, reset } = useFilter({
+    });
 
     const [params, setParams] = useState({
         include: 'color,brand',
@@ -35,7 +37,15 @@ export default function Dashboard() {
     const refresh = () => {
         setParams({
             ...params,
-            filter: filters,
+            filter: {
+                brand_id: filters.brand_id ?? '',
+                color_id: filters.color_id ?? '',
+                search: filters.search ?? '',
+                available_between:
+                    filters.available_after && filters.available_before
+                        ? `${dateToDateString(filters.available_after)},${dateToDateString(filters.available_before)}`
+                        : '',
+            },
         });
     };
 
@@ -67,17 +77,37 @@ export default function Dashboard() {
                                 <Input placeholder="Buscar" value={filters.search} onChange={(e) => setFilter('search', e.target.value)} />
                             </Filter>
                             <Filter>
-                                <ColorPicker triggerClassName={'w-40'} value={filters.color_id ?? ''} onChange={(value) => setFilter('color_id', value)} />
+                                <ColorPicker
+                                    triggerClassName={'w-40'}
+                                    value={filters.color_id ?? ''}
+                                    onChange={(value) => setFilter('color_id', value)}
+                                />
                             </Filter>
                             <Filter>
-                                <BrandPicker triggerClassName={'w-48'} value={filters.brand_id ?? ''} onChange={(value) => setFilter('brand_id', value)} />
+                                <BrandPicker
+                                    triggerClassName={'w-48'}
+                                    value={filters.brand_id ?? ''}
+                                    onChange={(value) => setFilter('brand_id', value)}
+                                />
                             </Filter>
                             <Separator orientation="vertical" />
-                            <Filter label={"Disponível entre"}>
-                                <DatePicker label=''/>
+                            <Filter label={'Disponível entre'}>
+                                <DatePicker
+                                    buttonClassName={filters.available_before && !filters.available_after ? 'border-red-500' : ''}
+                                    label=""
+                                    onClear={() => reset('available_after')}
+                                    date={filters.available_after}
+                                    onChangeDate={(date) => setFilter('available_after', date)}
+                                />
                             </Filter>
-                            <Filter label={"e"}>
-                                <DatePicker label='' />
+                            <Filter label={'e'}>
+                                <DatePicker
+                                    buttonClassName={filters.available_after && !filters.available_before ? 'border-red-500' : ''}
+                                    label=""
+                                    onClear={() => reset('available_before')}
+                                    date={filters.available_before}
+                                    onChangeDate={(date) => setFilter('available_before', date)}
+                                />
                             </Filter>
                         </>
                     }

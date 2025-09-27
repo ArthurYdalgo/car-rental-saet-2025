@@ -11,7 +11,7 @@ import {
 import { useState } from "react";
 import { TrashIcon } from "@heroicons/react/20/solid";
 
-export default ({date, label = 'Data', innerDivClassName='gap-3', labelClassName = '', onChangeDate = () => {}, onClear = () => {}}) => {
+export default ({date, label = 'Data', innerDivClassName='gap-3', labelClassName = '', buttonClassName = '', onChangeDate = () => {}, onClear = () => {}}) => {
     const [open, setOpen] = useState(false);
 
     const [month, setMonth] = useState(date);
@@ -27,7 +27,7 @@ export default ({date, label = 'Data', innerDivClassName='gap-3', labelClassName
                         <Button
                             variant="outline"
                             id="date-picker"
-                            className="w-auto justify-between font-normal py-[18px]"
+                            className={"w-auto justify-between font-normal py-[18px] " + buttonClassName}
                         >
                             {date ? date.toLocaleDateString('pt-BR') :  "Selecione"}
                             <ChevronDownIcon />

@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\QueryBuilder\Filters\Vehicle\AvailableBetween;
+use App\Http\QueryBuilder\Filters\Vehicle\Search;
 use App\Http\Requests\Api\Vehicle\StoreRequest;
 use App\Http\Requests\Api\Vehicle\UpdateRequest;
 use App\Http\Resources\VehicleResource;
@@ -23,13 +25,8 @@ class VehicleController extends Controller
             ->allowedFilters([
                 AllowedFilter::exact('brand_id'),
                 AllowedFilter::exact('color_id'),
-                AllowedFilter::callback('search', function ($query, $value) {
-                    $query->where(function ($query) use ($value) {
-                        $query->whereLike('name', "%{$value}%")
-                            ->orWhereLike('license_plate', "{$value}%")
-                            ->orWhere('year', $value);
-                    });
-                }),
+                AllowedFilter::custom('search', new Search),
+                AllowedFilter::custom('available_between', new AvailableBetween),
             ])
             ->allowedSorts([
                 'id',

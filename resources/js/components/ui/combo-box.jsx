@@ -25,7 +25,7 @@ export function ComboBox ({ items, value, onChange, placeholder = "Select...", s
       </PopoverTrigger>
       <PopoverContent className="w-[200px] p-0">
         <Command>
-          <CommandInput placeholder={searchPlaceholder} className="h-9 focus:border-none border-none focus:outline-none outline-none focus:ring-0 focus:border-transparent text-input " />
+          <CommandInput placeholder={searchPlaceholder} className="h-9 border-none focus:ring-0 " />
           <CommandList>
             <CommandEmpty>No item found.</CommandEmpty>
             <CommandGroup>
