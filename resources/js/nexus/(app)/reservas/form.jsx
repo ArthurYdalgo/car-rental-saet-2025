@@ -12,6 +12,7 @@ export default function CustomerForm({ formHook, onSubmit = (e) => {}, ...props 
             <FormRow cols={12}>
                 <FormField span={4} error={formHook.errors.name} label="Nome" htmlFor="name" required>
                     <ComboBox
+                    disabled={1}
                     buttonClassName='w-full'
                         value={formHook.data.customer_id ? `${formHook.data.customer_id}` : ''}
                         onChange={(value) => formHook.setData('customer_id', value)}
@@ -30,7 +31,7 @@ export default function CustomerForm({ formHook, onSubmit = (e) => {}, ...props 
 
                 <FormField span={4} error={formHook.errors.name} label="Nome" htmlFor="name" required>
                     <ComboBox
-                        
+                        // disabled={1}
                         prefetchedOptions={[
                              { id: 1, name: 'Carro 1', license_plate: 'ABC-1234', color: { hex: '#ff0000' } },
                         ]}

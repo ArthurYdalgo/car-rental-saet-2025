@@ -7,29 +7,6 @@ import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, Command
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { useNonInitialEffect } from "@/hooks/use-non-initial-effect"
 
-/**
- * ComboBox
- *
- * Props:
- * - items, value, onChange, placeholder, searchPlaceholder, buttonClassName (same as before)
- * - searchEndpoint: string | null
- * - parseItem: (raw) => ({ value, label, keywords? })
- * - minChars: number (default 0)
- * - debounceMs: number (default 300)
- * - extraParams: object (merged into query when parseSearch returns an object)
- * - parseSearch: (query) => object | string
- *    • default: (q) => ({ "filter[search]": q })
- *    • if returns object → merged with extraParams and sent via axios `params`
- *    • if returns string → appended to URL like `${endpoint}?${thatString}`
- * - prefetchOptions: boolean (default false)
- *    • when true and `searchEndpoint` is provided, performs an initial fetch on mount
- *    • respects `minChars` (i.e., if query length < minChars, it won’t fetch)
- *    • prevents duplicate fetch on open when the same query has already been prefetched
- * - fetchOnOpen: boolean (default true)
- *    • when false, opening the combobox will NOT trigger a fetch (typing will)
- * - prefetchedOptions: array | null (default null)
- *    • raw items to seed the list (useful for edit forms); normalized via parseItem
- */
 export function ComboBox({
   items = [],
   value,
@@ -43,7 +20,7 @@ export function ComboBox({
   minChars = 0,
   debounceMs = 300,
   extraParams = {},
-  parseSearch = (q) => ({ "filter[search]": q }), // <-- default here
+  parseSearch = (q) => ({ "filter[search]": q }),
   prefetchOptions = false,
   fetchOnOpen = false,
   prefetchedOptions = null
@@ -52,22 +29,76 @@ export function ComboBox({
   const [query, setQuery] = useState("")
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
+
+  // remote results (from server)
   const [remoteItems, setRemoteItems] = useState([])
+  // parsed prefetched options (always included/merged with remote)
+  const [prefetchedParsed, setPrefetchedParsed] = useState([])
+
   const abortRef = useRef(null)
   const debounceRef = useRef(null)
   const lastFetchedQueryRef = useRef(null)
   const didPrefetchRef = useRef(false)
 
-  const effectiveItems = useMemo(() => (searchEndpoint ? remoteItems : items), [searchEndpoint, remoteItems, items])
+  // cache to resolve label instantly even if the item isn’t in current list
+  const labelCacheRef = useRef(new Map())
+  const cacheItems = (arr) => {
+    const map = labelCacheRef.current
+    for (const it of arr) map.set(String(it.value), it.label ?? "")
+  }
 
-  const currentLabel = useMemo(() => {
+  // parse + cache local (non-remote) items
+  useEffect(() => {
+    if (searchEndpoint) return
+    const normalized = (items || []).map((r) => {
+      const p = r && typeof r === "object" && "value" in r && "label" in r ? r : (parseItem(r) || {})
+      return { value: String(p.value ?? ""), label: p.label ?? "", keywords: Array.isArray(p.keywords) ? p.keywords : [] }
+    })
+    cacheItems(normalized)
+  }, [items, searchEndpoint, parseItem])
+
+  // parse + store + cache prefetchedOptions (always kept/merged with remote)
+  useEffect(() => {
+    if (!searchEndpoint) return
+    if (!prefetchedOptions || !Array.isArray(prefetchedOptions) || prefetchedOptions.length === 0) {
+      setPrefetchedParsed([])
+      return
+    }
+    const parsed = prefetchedOptions.map((r) => {
+      const p = parseItem(r) || {}
+      return {
+        value: String(p.value ?? ""),
+        label: p.label ?? "",
+        keywords: Array.isArray(p.keywords) ? p.keywords : []
+    }})
+    setPrefetchedParsed(parsed)
+    cacheItems(parsed)
+    // mark as prefetched for the empty query
+    didPrefetchRef.current = true
+    if (lastFetchedQueryRef.current == null) lastFetchedQueryRef.current = ""
+  }, [searchEndpoint, prefetchedOptions, parseItem])
+
+  // merge logic: when remote search is enabled, show prefetched + remote (dedup by value; prefer remote)
+  const effectiveItems = useMemo(() => {
+    if (!searchEndpoint) return items
+    // build map with prefetched first, then overwrite with remote to prefer server labels
+    const map = new Map()
+    for (const it of prefetchedParsed) map.set(String(it.value), it)
+    for (const it of remoteItems) map.set(String(it.value), it)
+    const combined = Array.from(map.values())
+    return combined
+  }, [searchEndpoint, prefetchedParsed, remoteItems, items])
+
+  const displayLabel = useMemo(() => {
     const found = effectiveItems.find((it) => String(it.value) === String(value))
-    return found ? found.label : null
+    if (found) return found.label
+    return labelCacheRef.current.get(String(value)) ?? null
   }, [effectiveItems, value])
 
   const runSearch = async (q) => {
     if (!searchEndpoint) return
     if ((q || "").length < minChars) {
+      // clear only the remote portion; prefetched stay included via merge
       setRemoteItems([])
       setLoading(false)
       setError(null)
@@ -82,14 +113,11 @@ export function ComboBox({
     setError(null)
     try {
       const spec = parseSearch(q)
-
       let res
       if (typeof spec === "string") {
-        // dev provided full query string
         const url = spec.trim().length ? `${searchEndpoint}?${spec}` : searchEndpoint
         res = await axios.get(url, { signal: controller.signal })
       } else {
-        // dev provided params object – merge with extraParams
         const params = { ...(spec || {}), ...extraParams }
         res = await axios.get(searchEndpoint, { params, signal: controller.signal })
       }
@@ -104,6 +132,7 @@ export function ComboBox({
         }
       })
       setRemoteItems(parsed)
+      cacheItems(parsed)
       lastFetchedQueryRef.current = q
     } catch (err) {
       if (axios.isCancel(err) || err?.name === "CanceledError") {
@@ -117,16 +146,14 @@ export function ComboBox({
     }
   }
 
-  // Debounced search on open/typing
+  // debounced fetch on open/typing (remote mode)
   useNonInitialEffect(() => {
     if (!searchEndpoint || !open) return
-
-    // If we don't want auto-fetch on just opening and user hasn't typed, skip
     if (!fetchOnOpen && query.length === 0) return
 
     if (debounceRef.current) clearTimeout(debounceRef.current)
     debounceRef.current = setTimeout(() => {
-      // If we already have data for this exact query (from prefetch or prefetchedOptions), skip refetch
+      // skip if we already fetched this exact query and have remote items
       if (
         (prefetchOptions || didPrefetchRef.current) &&
         lastFetchedQueryRef.current === query &&
@@ -139,16 +166,15 @@ export function ComboBox({
     return () => {
       if (debounceRef.current) clearTimeout(debounceRef.current)
     }
-    // NOTE: do NOT depend on remoteItems length, to avoid re-trigger from setRemoteItems
   }, [query, open, searchEndpoint, debounceMs, prefetchOptions, fetchOnOpen])
 
-  // Abort in-flight request when closing popover
+  // abort on close
   useNonInitialEffect(() => {
     if (!searchEndpoint) return
     if (!open && abortRef.current) abortRef.current.abort()
   }, [open, searchEndpoint])
 
-  // Optional prefetch on mount or when endpoint changes
+  // optional prefetch on mount/endpoint change (remote mode)
   useNonInitialEffect(() => {
     if (!searchEndpoint || !prefetchOptions) return
     ;(async () => {
@@ -157,25 +183,7 @@ export function ComboBox({
     })()
   }, [searchEndpoint, prefetchOptions])
 
-  // Seed from prefetchedOptions (useful for edit forms)
-  useEffect(() => {
-    if (!searchEndpoint) return
-    if (!prefetchedOptions || !Array.isArray(prefetchedOptions) || prefetchedOptions.length === 0) return
-
-    const parsed = prefetchedOptions.map((r) => {
-      const p = parseItem(r) || {}
-      return {
-        value: String(p.value ?? ""),
-        label: p.label ?? "",
-        keywords: Array.isArray(p.keywords) ? p.keywords : []
-      }
-    })
-    setRemoteItems(parsed)
-    didPrefetchRef.current = true
-    lastFetchedQueryRef.current = "" // seeded for empty query
-  }, [searchEndpoint, prefetchedOptions, parseItem])
-
-  // Cleanup on unmount
+  // cleanup
   useEffect(() => {
     return () => {
       if (abortRef.current) abortRef.current.abort()
@@ -193,12 +201,13 @@ export function ComboBox({
           disabled={disabled}
           className={"w-[200px] justify-between " + buttonClassName}
         >
-          {currentLabel || placeholder}
+          {displayLabel || placeholder}
           <ChevronsUpDown className="opacity-50" />
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-[280px] p-0">
-        <Command shouldFilter={!searchEndpoint}>
+        {/* always enable client-side filtering so prefetched+remote can be searched together */}
+        <Command shouldFilter>
           <CommandInput
             placeholder={searchPlaceholder}
             className="h-9 border-none focus:ring-0"
@@ -218,7 +227,9 @@ export function ComboBox({
               </CommandGroup>
             )}
 
-            {!loading && !error && effectiveItems.length === 0 && <CommandEmpty>No item found.</CommandEmpty>}
+            {!loading && !error && effectiveItems.length === 0 && (
+              <CommandEmpty>No item found.</CommandEmpty>
+            )}
 
             {!loading && !error && effectiveItems.length > 0 && (
               <CommandGroup>
@@ -231,9 +242,11 @@ export function ComboBox({
                         ? [item.label, ...(item.keywords ?? [])]
                         : (item.keywords ?? [])
                     }
-                    onSelect={(currentValue) => {
-                      const newValue = currentValue === String(value) ? "" : currentValue
-                      onChange(newValue)
+                    onSelect={() => {
+                      const id = String(item.value)
+                      onChange(id)
+                      labelCacheRef.current.set(id, item.label ?? "")
+					  setQuery("")
                       setOpen(false)
                     }}
                   >
