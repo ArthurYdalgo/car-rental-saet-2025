@@ -69,7 +69,16 @@ export default function Dashboard() {
     };
 
     return (
-        <AppLayout breadcrumbs={breadcrumbs}>
+        <AppLayout
+            breadcrumbs={breadcrumbs}
+            actions={
+                <div className="ml-auto flex items-center gap-2">
+                    <Button size="xs" asChild>
+                        <Link href={route('reservas.cadastrar')}>Cadastrar</Link>
+                    </Button>
+                </div>
+            }
+        >
             <Head title="Reservas" />
 
             <div className="flex h-full flex-col gap-4 rounded-xl p-4">
@@ -162,7 +171,7 @@ export default function Dashboard() {
                                                     loading={rental.id == processing}
                                                     variant="destructive"
                                                     includeChildrenWhenLoading={false}
-                                                    className='min-w-20'
+                                                    className="min-w-20"
                                                     size="xs"
                                                 >
                                                     Cancelar
@@ -175,7 +184,7 @@ export default function Dashboard() {
                                                     loading={rental.id == processing}
                                                     variant="orange"
                                                     includeChildrenWhenLoading={false}
-                                                    className='min-w-20'
+                                                    className="min-w-20"
                                                     size="xs"
                                                 >
                                                     Restaurar

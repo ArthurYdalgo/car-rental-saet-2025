@@ -5,15 +5,42 @@ import { Button } from '@/components/ui/button';
 
 import { FormActions, FormField, FormRow } from '@/components/form-layout';
 import { ComboBox } from '@/components/ui/combo-box';
+import axios from 'axios';
+import { toast } from 'sonner';
+import { useState } from 'react';
+import Money from '@/components/money';
 
-export default function CustomerForm({ formHook, onSubmit = (e) => {}, ...props }) {
+export default function RentalForm({ formHook, onSubmit = (e) => {}, ...props }) {
+    const [vehicle, setVehicle] = useState(props.prefetchedVehicle);
+
+    const updateVehicle = (vehicleId) => {
+
+        if (!vehicleId) {
+            setVehicle(null);
+            return;
+        }
+
+        axios
+            .get(`/api/vehicles/${vehicleId}`)
+            .then((response) => {
+                setVehicle(response.data.data);
+            })
+            .catch((error) => {
+                toast.error('Erro ao obter dados do veículo.');
+            });
+    };
+
     return (
         <form onSubmit={onSubmit} className="space-y-8 p-6">
             <FormRow cols={12}>
-                <FormField span={4} error={formHook.errors.name} label="Nome" htmlFor="name" required>
+                <FormField span={4} error={formHook.errors.name} label="Cliente" htmlFor="customer_id" required>
                     <ComboBox
-                    disabled={1}
-                    buttonClassName='w-full'
+                        id="customer_id"
+                        name="customer_id"
+                        popoverContentClassName='w-[350px]'
+                        disabled={props.disableCustomersComboBox ?? false}
+                        prefetchedOptions={props.prefetchedCustomers ?? null}
+                        buttonClassName="w-full"
                         value={formHook.data.customer_id ? `${formHook.data.customer_id}` : ''}
                         onChange={(value) => formHook.setData('customer_id', value)}
                         parseItem={(customer) => ({
@@ -29,15 +56,19 @@ export default function CustomerForm({ formHook, onSubmit = (e) => {}, ...props 
                     />
                 </FormField>
 
-                <FormField span={4} error={formHook.errors.name} label="Nome" htmlFor="name" required>
+                <FormField span={4} error={formHook.errors.name} description={<span>Preço por dia: <Money amount={vehicle?.price_per_day} /></span>} label="Veículo" htmlFor="vehicle_id" required>
                     <ComboBox
-                        // disabled={1}
-                        prefetchedOptions={[
-                             { id: 1, name: 'Carro 1', license_plate: 'ABC-1234', color: { hex: '#ff0000' } },
-                        ]}
-                        buttonClassName='w-full'
+                        id="vehicle_id"
+                        name="vehicle_id"
+                        disabled={props.disableVehiclesComboBox ?? false}
+                        prefetchedOptions={props.prefetchedVehicles ?? null}
+                        buttonClassName="w-full"
                         value={formHook.data.vehicle_id ? `${formHook.data.vehicle_id}` : ''}
-                        onChange={(value) => formHook.setData('vehicle_id', value)}
+                        popoverContentClassName='w-[350px]'
+                        onChange={(value) => {
+                            updateVehicle(value);
+                            formHook.setData('vehicle_id', value);
+                        }}
                         parseItem={(vehicle) => ({
                             value: `${vehicle.id}`,
                             label: (

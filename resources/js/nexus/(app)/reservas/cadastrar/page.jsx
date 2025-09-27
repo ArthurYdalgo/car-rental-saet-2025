@@ -9,7 +9,7 @@ import RentalForm from '../form';
 
 export default () => {
     const { data, setData, errors, setErrors, reset, processing, setProcessing } = useForm({
-        vehicle_id: 1,
+        
     });
 
     const handleSubmit = (e) => {

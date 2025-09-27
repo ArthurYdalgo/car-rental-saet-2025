@@ -14,6 +14,7 @@ export function ComboBox({
   placeholder = "Select...",
   searchPlaceholder = "Search...",
   buttonClassName = "",
+  popoverContentClassName = "",
   disabled = false,
   searchEndpoint = null,
   parseItem = (item) => ({ value: String(item.id ?? ""), label: item.name ?? "", keywords: [] }),
@@ -205,7 +206,7 @@ export function ComboBox({
           <ChevronsUpDown className="opacity-50" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-[280px] p-0">
+      <PopoverContent className={"w-[280px] p-0 " + popoverContentClassName} onCloseAutoFocus={() => setQuery("")}>
         {/* always enable client-side filtering so prefetched+remote can be searched together */}
         <Command shouldFilter>
           <CommandInput
@@ -244,6 +245,15 @@ export function ComboBox({
                     }
                     onSelect={() => {
                       const id = String(item.value)
+						console.log({id, value})
+					  if(String(id) === String(value)){
+						  // selecting the same value again closes the popover without changing anything
+						  setOpen(false)
+						  onChange(null)
+						  setQuery("")
+						  return
+					  }
+
                       onChange(id)
                       labelCacheRef.current.set(id, item.label ?? "")
 					  setQuery("")
