@@ -9,7 +9,10 @@ import RentalForm from '../form';
 
 export default () => {
     const { data, setData, errors, setErrors, reset, processing, setProcessing } = useForm({
-        
+        payment_methods: [
+            { id: '', amount: 0 },
+        ],
+        paid_amount: 0,
     });
 
     const handleSubmit = (e) => {
@@ -20,15 +23,16 @@ export default () => {
         setProcessing(true);
 
         axios
-            .post(`/api/customers`, body)
+            .post(`/api/rentals`, body)
             .then((response) => {
-                toast.success('Cliente criado com sucesso!');
-                visit(route('clientes.customer', { customer: response.data.data.id }));
+                toast.success('Reserva criada com sucesso!');
+                // visit(route('reservas.rental', { rental: response.data.data.id }));
+                visit(route('reservas'));
             })
             .catch((error) => {
                 let response = error.response.data;
                 console.log(response);
-                let message = response?.message ?? 'Erro ao atualizar cliente.';
+                let message = response?.message ?? 'Erro ao cadastrar reserva.';
 
                 toast.error(message);
                 setErrors(response?.errors);

@@ -129,6 +129,7 @@ export function FormField({
   htmlFor,
   description,
   error,
+  insertEmptyLabel = false, // if no label, insert an invisible one for a11y alignment
   required,
   className,
   children,
@@ -157,7 +158,7 @@ export function FormField({
         <Label htmlFor={htmlFor} className="text-sm whitespace-nowrap">
           {label} {required ? <span className="text-destructive whitespace-nowrap">*</span> : null}
         </Label>
-      ) : null}
+      ) : (insertEmptyLabel ? <Label className="opacity-0 text-sm whitespace-nowrap">|</Label> : null)} {/* for a11y if no label */}
       {children}
       {error ? (
         <p className="text-xs text-destructive">{error}</p>

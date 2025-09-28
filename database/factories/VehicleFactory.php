@@ -28,7 +28,7 @@ class VehicleFactory extends Factory
             'year' => $this->faker->numberBetween(2000, 2024),
             'seats' => $this->faker->numberBetween(5, 9),
             'trunk_capacity' => $this->faker->numberBetween(100, 500),
-            'price_per_day' => $this->faker->randomFloat(2, 100, 1000),
+            'price_per_day' => $this->faker->randomFloat(2, 100, 500),
         ];
     }
 }

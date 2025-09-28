@@ -33,7 +33,7 @@ const CurrencyInput = ({ currentValue = 0, className = '', onChangeInput, name =
             }}
             onValueChange={(values) => {
                 if (onChangeInput) {
-                    onChangeInput((parseFloat(values.value) / 100).toFixed(2));
+                    onChangeInput(parseFloat((parseFloat(values.value) / 100).toFixed(2)));
                 }
             }}
         />

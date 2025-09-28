@@ -9,17 +9,21 @@ import If from '@/components/if';
 import Money from '@/components/money';
 import PaymentMethodPicker from '@/components/payment-method-picker';
 import { ComboBox } from '@/components/ui/combo-box';
+import { useNonInitialEffect } from '@/hooks/use-non-initial-effect';
 import { MinusIcon, PlusIcon } from '@heroicons/react/20/solid';
+import { nexusProps } from '@laravext/react';
 import axios from 'axios';
 import { useState } from 'react';
 import { toast } from 'sonner';
 
 export default function RentalForm({ formHook, onSubmit = (e) => {}, ...props }) {
     const [vehicle, setVehicle] = useState(props.prefetchedVehicle);
+    const { payment_methods } = nexusProps();
 
     const updateVehicle = (vehicleId) => {
         if (!vehicleId) {
             setVehicle(null);
+            formHook.setData({ ...formHook.data, vehicle_id: null, vehicle_price_per_day: null, price: null });
             return;
         }
 
@@ -32,6 +36,29 @@ export default function RentalForm({ formHook, onSubmit = (e) => {}, ...props })
                 toast.error('Erro ao obter dados do veículo.');
             });
     };
+
+    useNonInitialEffect(() => {
+        if (!vehicle || !formHook.data.start_date || !formHook.data.end_date) {
+            formHook.setData('price', null);
+            return;
+        }
+
+        let startDate = new Date(formHook.data.start_date);
+        let endDate = new Date(formHook.data.end_date);
+
+        if (endDate < startDate) {
+            formHook.setData('price', null);
+            return;
+        }
+
+        // calculate difference in days
+        let diffTime = Math.abs(endDate - startDate);
+        let diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1; // +1 to include the start day
+
+        let totalPrice = diffDays * vehicle.price_per_day;
+
+        formHook.setData({ ...formHook.data, price: parseFloat(totalPrice).toFixed(2), vehicle_price_per_day: vehicle.price_per_day });
+    }, [formHook.data.start_date, formHook.data.end_date, vehicle]);
 
     return (
         <form onSubmit={onSubmit} className="space-y-8 p-6">
@@ -109,66 +136,130 @@ export default function RentalForm({ formHook, onSubmit = (e) => {}, ...props })
 
             <FormSection title="Datas" titleWidth="md:w-48">
                 <FormRow cols={12}>
-                    <FormField span={2} error={formHook.errors.name} label="Início" htmlFor="vehicle_id" required>
-                        <DatePicker label="" />
+                    <FormField span={3} error={formHook.errors.name} label="Início" htmlFor="start_date" required>
+                        <DatePicker label="" date={formHook.data.start_date} onChangeDate={(date) => formHook.setData('start_date', date)} />
                     </FormField>
-                    <FormField span={2} error={formHook.errors.name} label="Termino" htmlFor="vehicle_id" required>
-                        <DatePicker label="" />
+                    <FormField span={3} error={formHook.errors.name} label="Termino" htmlFor="end_date" required>
+                        <DatePicker label="" date={formHook.data.end_date} onChangeDate={(date) => formHook.setData('end_date', date)} />
+                    </FormField>
+                </FormRow>
+                <FormRow className={'mt-2'} cols={12}>
+                    <FormField span={3} error={formHook.errors.name} label="Pago em" htmlFor="´paid_at" required>
+                        <DatePicker label="" date={formHook.data.paid_at} onChangeDate={(date) => formHook.setData('paid_at', date)} />
                     </FormField>
                 </FormRow>
             </FormSection>
 
-            <FormSection title="Pagamento" titleWidth="md:w-48">
-                <FormRow cols={12}>
-                    <FormField span={3} error={formHook.errors.name} label="Método de Pagamento" htmlFor="vehicle_id" required>
-                        {(formHook.data.payment_methods ?? [{ id: '', amount: 0 }]).map((method, index) => (
-                            <div key={`payment-section-method-${index}`} className="flex items-center gap-2">
-                                <PaymentMethodPicker
-                                    onChange={(value) => {
-                                        let updatedMethods = [...(formHook.data.payment_methods ?? [])];
-                                        updatedMethods[index] = { id: value, amount: method.amount };
+            <FormSection
+                title="Pagamento"
+                subtitle={
+                    <div className="mt-2 flex flex-col gap-2">
+                        <span className="text-sm">
+                            Total: <Money amount={formHook.data.price} />
+                        </span>
+                        <If condition={vehicle && formHook.data.price && formHook.data.paid_amount < formHook.data.price}>
+                            <span className="text-sm">
+                                A pagar: <Money amount={formHook.data.price - formHook.data.paid_amount} />
+                            </span>
+                        </If>
 
-                                        console.log(updatedMethods);
-                                        formHook.setData('payment_methods', updatedMethods);
+                        <If condition={vehicle && formHook.data.paid_amount > formHook.data.price}>
+                            <span className="text-sm text-red-500">O valor pago não pode ser maior que o total da reserva.</span>
+                        </If>
+                    </div>
+                }
+                titleWidth="md:w-48"
+            >
+                {formHook.data.payment_methods.map((payment_method, index) => (
+                    <FormRow cols={12} key={`payment-method-row-${payment_method.id}-${index}`}>
+                        <FormField
+                            span={3}
+                            error={formHook.errors.name}
+                            label={index == 0 ? 'Método de Pagamento' : ''}
+                            insertEmptyLabel={true}
+                            htmlFor="vehicle_id"
+                            required
+                        >
+                            <PaymentMethodPicker
+                                exclude={formHook.data.payment_methods.map((pm) => pm.id).filter((id, i) => i !== index)}
+                                onChange={(value) => {
+                                    let updatedMethods = [...(formHook.data.payment_methods ?? [])];
+
+                                    updatedMethods[index] = { ...updatedMethods[index], id: value };
+
+                                    let totalAmount = updatedMethods.reduce((acc, pm) => acc + (pm.amount || 0), 0);
+
+                                    formHook.setData('payment_methods', updatedMethods);
+                                }}
+                                value={payment_method.id}
+                            />
+                        </FormField>
+
+                        <FormField
+                            span={3}
+                            error={formHook.errors.name}
+                            label={index == 0 ? 'Valor' : ''}
+                            insertEmptyLabel={true}
+                            htmlFor="vehicle_id"
+                            required
+                        >
+                            <div className="flex items-center gap-2">
+                                <CurrencyInput
+                                    className={formHook.data.paid_amount > formHook.data.price ? 'border border-red-500' : ''}
+                                    currentValue={payment_method.amount}
+                                    onChangeInput={(value) => {
+                                        let updatedMethods = [...(formHook.data.payment_methods ?? [])];
+                                        updatedMethods[index] = { ...updatedMethods[index], amount: value };
+
+                                        let totalAmount = updatedMethods.reduce((acc, pm) => acc + (pm.amount || 0), 0);
+
+                                        formHook.setData({ ...formHook.data, paid_amount: totalAmount, payment_methods: updatedMethods });
                                     }}
-                                    value={method.id}
                                 />
                             </div>
-                        ))}
-                    </FormField>
-                    <FormField span={3} error={formHook.errors.name} label="Valor" htmlFor="vehicle_id" required>
-                        {(formHook.data.payment_methods ?? [{ id: '', amount: 0 }]).map((method, index) => (
-                            <div key={`payment-section-amount-${index}`} className="flex items-center gap-2">
-                                <CurrencyInput />
-                                {/* <If
-                                    condition={
-                                        (formHook.data.payment_methods ?? []).length > 1 && index == (formHook.data.payment_methods ?? []).length - 1
-                                    }
-                                >
-                                    <Button type="button" variant="destructive"></Button>
-                                </If> */}
+
+                            {/* <PaymentMethodPicker /> */}
+                        </FormField>
+                        <FormField span={3} error={formHook.errors.name} insertEmptyLabel={true} htmlFor="vehicle_id" required>
+                            <div className="flex h-full items-center gap-2">
                                 <If
                                     condition={
-                                        (formHook.data.payment_methods ?? []).length > 1 && index < (formHook.data.payment_methods ?? []).length - 1
+                                        // this will never show up if there's only one payment method
+                                        (formHook.data.payment_methods ?? []).length > 1
                                     }
                                 >
-                                    <Button type="button" variant="destructive" onClick={() => {
-                                        let updatedMethods = [...(formHook.data.payment_methods ?? [])];
-                                        
-                                        // remove the item at index
-                                        delete updatedMethods[index];
+                                    <Button
+                                        type="button"
+                                        size="sm"
+                                        variant="destructive"
+                                        onClick={() => {
+                                            let updatedMethods = [...(formHook.data.payment_methods ?? [])];
 
-                                        // reset indexes
-                                        updatedMethods = updatedMethods.filter(item => item);
+                                            // remove the item at index
+                                            delete updatedMethods[index];
 
-                                        formHook.setData('payment_methods', updatedMethods);
-                                    }}>
+                                            // reset indexes
+                                            updatedMethods = updatedMethods.filter((item) => item);
+
+                                            // sum the amount of all payment methods
+                                            let totalAmount = updatedMethods.reduce((acc, pm) => acc + (pm.amount || 0), 0);
+
+                                            formHook.setData({ ...formHook.data, paid_amount: totalAmount, payment_methods: updatedMethods });
+                                        }}
+                                    >
                                         <MinusIcon />
                                     </Button>
                                 </If>
-                                <If condition={((formHook.data.payment_methods ?? []).length <= 1 && index == 0) || index == (formHook.data.payment_methods ?? []).length - 1}>
+                                <If
+                                    condition={
+                                        (((formHook.data.payment_methods ?? []).length <= 1 && index == 0) ||
+                                            index == (formHook.data.payment_methods ?? []).length - 1) &&
+                                        formHook.data.payment_methods.length < payment_methods.length
+                                    }
+                                >
                                     <Button
                                         type="button"
+                                        size="sm"
                                         variant="green"
                                         onClick={() => {
                                             let updatedMethods = [...(formHook.data.payment_methods ?? [])];
@@ -178,6 +269,7 @@ export default function RentalForm({ formHook, onSubmit = (e) => {}, ...props })
                                             }
 
                                             updatedMethods.push({ id: '', amount: 0 });
+
                                             formHook.setData('payment_methods', updatedMethods);
                                         }}
                                     >
@@ -185,15 +277,17 @@ export default function RentalForm({ formHook, onSubmit = (e) => {}, ...props })
                                     </Button>
                                 </If>
                             </div>
-                        ))}
 
-                        {/* <PaymentMethodPicker /> */}
-                    </FormField>
-                </FormRow>
+                            {/* <PaymentMethodPicker /> */}
+                        </FormField>
+                    </FormRow>
+                ))}
             </FormSection>
 
             <FormActions>
-                <Button type="submit">Salvar</Button>
+                <Button disabled={formHook.data.paid_amount > formHook.data.price} type="submit">
+                    Salvar
+                </Button>
             </FormActions>
         </form>
     );

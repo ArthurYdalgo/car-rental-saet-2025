@@ -200,7 +200,7 @@ export function ComboBox({
           role="combobox"
           aria-expanded={open}
           disabled={disabled}
-          className={"w-[200px] justify-between " + buttonClassName}
+          className={"w-[200px]  justify-between " + buttonClassName}
         >
           {displayLabel || placeholder}
           <ChevronsUpDown className="opacity-50" />
