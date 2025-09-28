@@ -6,6 +6,7 @@ use App\Http\Resources\VehicleResource;
 use App\Models\Brand;
 use App\Models\Color;
 use App\Models\Vehicle;
+use App\Services\VehicleService;
 use Illuminate\Http\Request;
 
 class VehicleController extends Controller
@@ -31,6 +32,7 @@ class VehicleController extends Controller
     {
         $colors = Color::all();
         $brands = Brand::all();
+        $vehicle_types = VehicleService::types();
 
         $vehicle->loadMissing(['brand', 'color']);
 
@@ -38,6 +40,7 @@ class VehicleController extends Controller
             'vehicle' => $vehicle->toResource(),
             'colors' => $colors,
             'brands' => $brands,
+            'vehicle_types' => $vehicle_types,
         ])->render();
     }
 
@@ -45,7 +48,8 @@ class VehicleController extends Controller
     {
         $colors = Color::all();
         $brands = Brand::all();
+        $vehicle_types = VehicleService::types();
 
-        return nexus(props: compact('colors', 'brands'))->render();
+        return nexus(props: compact('colors', 'brands', 'vehicle_types'))->render();
     }
 }

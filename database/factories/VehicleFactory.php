@@ -24,7 +24,7 @@ class VehicleFactory extends Factory
             'color_id' => Color::inRandomOrder()->first()->id,
             'type' => $this->faker->randomElement(array_keys(VehicleService::$types)),
             'license_plate' => strtoupper($this->faker->bothify('???-####')),
-            'name' => $this->faker->randomElement(['Model S', 'Model 3', 'Model X', 'Model Y', 'Civic', 'Corolla', 'Mustang', 'Camry', 'Accord', 'Altima']),
+            'name' => $this->faker->randomElement(['Model S', 'Model 3', 'Model X', 'Model Y', 'Civic', 'Corolla', 'Mustang', 'Camry', 'Accord', 'Altima', 'CX-5', 'RAV4', 'Tucson', 'Golf', 'HRV', 'Ka', 'Palio', 'Uno', 'Celta']),
             'year' => $this->faker->numberBetween(2000, 2024),
             'seats' => $this->faker->numberBetween(5, 9),
             'trunk_capacity' => $this->faker->numberBetween(100, 500),

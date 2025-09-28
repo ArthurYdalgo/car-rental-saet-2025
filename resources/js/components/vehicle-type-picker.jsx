@@ -1,23 +1,18 @@
 // /components/StatePicker.tsx
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { nexusProps } from '@laravext/react';
 
-// list of objects with name values for all Brazilian states (value is abreviation)
-const VEHICLE_TYPES = [
-    { value: 'sedan', name: 'Sedan' },
-    { value: 'hatchback', name: 'Hatchback' },
-    { value: 'pickup', name: 'Pickup' },
-    { value: 'truck', name: 'Caminhão' },
-    { value: 'van', name: 'Van' },
-];
 
 export default function VehicleTypePicker({ value, onChange, placeholder = 'Selecione o tipo', disabled, id, name }) {
+    const vehicleTypes = nexusProps().vehicle_types || [];
+
     return (
         <Select value={value} onValueChange={onChange} disabled={disabled} name={name}>
             <SelectTrigger id={id}>
                 <SelectValue placeholder={placeholder} />
             </SelectTrigger>
             <SelectContent>
-                {VEHICLE_TYPES.map((vehicleType) => (
+                {vehicleTypes.map((vehicleType) => (
                     <SelectItem key={`vehicle-type-picker-${vehicleType.value}`} value={vehicleType.value}>
                         {vehicleType.name}
                     </SelectItem>

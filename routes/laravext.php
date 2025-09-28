@@ -4,6 +4,7 @@ use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\EmailVerificationPromptController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\RentalController;
 use App\Http\Controllers\Settings\PasswordController;
 use App\Http\Controllers\Settings\ProfileController;
 use App\Http\Controllers\VehicleController;
@@ -39,6 +40,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get("veiculos/{vehicle}", [VehicleController::class, 'show'])->name('veiculos.vehicle');
 
     Route::laravext('reservas');
+    Route::get("reservas/cadastrar", [RentalController::class, 'create'])->name('reservas.cadastrar');
+    Route::get("reservas/{rental}/editar", [RentalController::class, 'edit'])->name('reservas.rental.editar');
+    Route::get("reservas/{rental}", [RentalController::class, 'show'])->name('reservas.rental');
 });
 
 Route::middleware(['guest'])->group(function () {

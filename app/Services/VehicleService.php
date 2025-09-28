@@ -48,4 +48,16 @@ class VehicleService
             ->whereNull('canceled_at')
             ->doesntExist();
     }
+
+    public static function types($as_associative_array = false)
+    {
+        if ($as_associative_array) {
+            return self::$types;
+        }
+
+        return collect(self::$types)
+            ->map(fn($name, $value) => (object) compact('name', 'value'))
+            ->values()
+            ->toArray();
+    }
 }
