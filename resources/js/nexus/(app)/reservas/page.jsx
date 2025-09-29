@@ -61,7 +61,10 @@ export default () => {
                 refresh();
             })
             .catch((error) => {
-                toast.error(`Erro ao ${rental.canceled_at ? 'restaurar' : 'cancelar'} a reserva.`);
+                let response = error.response.data;
+                let message = response?.message ?? `Erro ao ${rental.canceled_at ? 'restaurar' : 'cancelar'} a reserva.`;
+
+                toast.error(message);
             })
             .finally(() => {
                 setProcessing(null);
@@ -111,7 +114,11 @@ export default () => {
                                         Data de Encerramento
                                     </TableSortableField>
                                 </TableHead>
-                                <TableHead>Total</TableHead>
+                                <TableHead>
+                                    <TableSortableField handleClick={handleClick} sortBy={sortBy} field={'price'}>
+                                        Total
+                                    </TableSortableField>
+                                </TableHead>
                                 <TableHead>
                                     <TableSortableField handleClick={handleClick} sortBy={sortBy} field={'created_at'}>
                                         Criado em
@@ -201,4 +208,4 @@ export default () => {
             </div>
         </AppLayout>
     );
-}
+};

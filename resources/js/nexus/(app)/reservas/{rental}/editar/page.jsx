@@ -44,7 +44,6 @@ export default () => {
             })
             .catch((error) => {
                 let response = error.response.data;
-                console.log(response);
                 let message = response?.message ?? 'Erro ao atualizar reserva.';
 
                 toast.error(message);
