@@ -16,8 +16,8 @@ import axios from 'axios';
 import { useState } from 'react';
 import { toast } from 'sonner';
 
-export default function RentalForm({ formHook, onSubmit = (e) => {}, ...props }) {
-    const [vehicle, setVehicle] = useState(props.prefetchedVehicle);
+export default function RentalForm({ formHook, onSubmit = (e) => {}, disableCustomersComboBox = false, disableVehiclesComboBox = false, prefetchedVehicle = null, prefetchedCustomers = null, prefetchedVehicles = null, ...props }) {
+    const [vehicle, setVehicle] = useState(prefetchedVehicle);
     const { payment_methods } = nexusProps();
 
     const updateVehicle = (vehicleId) => {
@@ -69,8 +69,8 @@ export default function RentalForm({ formHook, onSubmit = (e) => {}, ...props })
                             id="customer_id"
                             name="customer_id"
                             popoverContentClassName="w-[350px]"
-                            disabled={props.disableCustomersComboBox ?? false}
-                            prefetchedOptions={props.prefetchedCustomers ?? null}
+                            disabled={disableCustomersComboBox ?? false}
+                            prefetchedOptions={prefetchedCustomers ?? null}
                             buttonClassName="w-full"
                             value={formHook.data.customer_id ? `${formHook.data.customer_id}` : ''}
                             onChange={(value) => formHook.setData('customer_id', value)}
@@ -105,8 +105,8 @@ export default function RentalForm({ formHook, onSubmit = (e) => {}, ...props })
                         <ComboBox
                             id="vehicle_id"
                             name="vehicle_id"
-                            disabled={props.disableVehiclesComboBox ?? false}
-                            prefetchedOptions={props.prefetchedVehicles ?? null}
+                            disabled={disableVehiclesComboBox ?? false}
+                            prefetchedOptions={prefetchedVehicles ?? null}
                             buttonClassName="w-full"
                             value={formHook.data.vehicle_id ? `${formHook.data.vehicle_id}` : ''}
                             popoverContentClassName="w-[350px]"
@@ -173,7 +173,7 @@ export default function RentalForm({ formHook, onSubmit = (e) => {}, ...props })
                 {formHook.data.payment_methods.map((payment_method, index) => (
                     <FormRow cols={12} key={`payment-method-row-${payment_method.id}-${index}`}>
                         <FormField
-                            span={3}
+                            span={2}
                             error={formHook.errors.name}
                             label={index == 0 ? 'Método de Pagamento' : ''}
                             insertEmptyLabel={true}
@@ -187,8 +187,6 @@ export default function RentalForm({ formHook, onSubmit = (e) => {}, ...props })
 
                                     updatedMethods[index] = { ...updatedMethods[index], id: value };
 
-                                    let totalAmount = updatedMethods.reduce((acc, pm) => acc + (pm.amount || 0), 0);
-
                                     formHook.setData('payment_methods', updatedMethods);
                                 }}
                                 value={payment_method.id}
@@ -196,7 +194,7 @@ export default function RentalForm({ formHook, onSubmit = (e) => {}, ...props })
                         </FormField>
 
                         <FormField
-                            span={3}
+                            span={2}
                             error={formHook.errors.name}
                             label={index == 0 ? 'Valor' : ''}
                             insertEmptyLabel={true}
@@ -211,7 +209,7 @@ export default function RentalForm({ formHook, onSubmit = (e) => {}, ...props })
                                         let updatedMethods = [...(formHook.data.payment_methods ?? [])];
                                         updatedMethods[index] = { ...updatedMethods[index], amount: value };
 
-                                        let totalAmount = updatedMethods.reduce((acc, pm) => acc + (pm.amount || 0), 0);
+                                        let totalAmount = parseFloat(parseFloat(updatedMethods.reduce((acc, pm) => acc + (parseFloat(pm.amount) || 0), 0)).toFixed(2));
 
                                         formHook.setData({ ...formHook.data, paid_amount: totalAmount, payment_methods: updatedMethods });
                                     }}
@@ -242,7 +240,7 @@ export default function RentalForm({ formHook, onSubmit = (e) => {}, ...props })
                                             updatedMethods = updatedMethods.filter((item) => item);
 
                                             // sum the amount of all payment methods
-                                            let totalAmount = updatedMethods.reduce((acc, pm) => acc + (pm.amount || 0), 0);
+                                            let totalAmount = parseFloat(parseFloat(updatedMethods.reduce((acc, pm) => acc + (parseFloat(pm.amount) || 0), 0)).toFixed(2));
 
                                             formHook.setData({ ...formHook.data, paid_amount: totalAmount, payment_methods: updatedMethods });
                                         }}

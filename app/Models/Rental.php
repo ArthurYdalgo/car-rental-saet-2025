@@ -32,7 +32,7 @@ class Rental extends Model
 
     #region Relationships
     public function paymentMethods(){
-        return $this->belongsToMany(PaymentMethod::class, 'payment_method_rental');
+        return $this->belongsToMany(PaymentMethod::class, 'payment_method_rental')->using(PaymentMethodRental::class)->withPivot('amount');
     }
 
     public function customer(){

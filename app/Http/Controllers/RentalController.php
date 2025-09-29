@@ -13,7 +13,9 @@ class RentalController extends Controller
             $query->with(['color', 'brand']);
         }]);
 
-        return nexus(props: compact('rental'))->render();
+        return nexus(props: [
+            'rental' => $rental->toResource()
+        ])->render();
     }
 
     public function edit(Rental $rental) {
@@ -23,7 +25,10 @@ class RentalController extends Controller
             $query->with(['color', 'brand']);
         }]);
 
-        return nexus(props: compact('payment_methods', 'rental'))->render();
+        return nexus(props: [
+            'rental' => $rental->toResource(),
+            'payment_methods' => $payment_methods,
+        ])->render();
     }
 
     public function create() {

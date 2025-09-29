@@ -14,6 +14,19 @@ class RentalResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        return parent::toArray($request);
+        $data = parent::toArray($request);
+
+        $data['payment_methods'] = $this->whenLoaded('paymentMethods', function () {
+            return $this->paymentMethods->map(function ($method) {
+                return [
+                    'id' => $method->id,
+                    'name' => $method->name,
+                    'tag' => $method->tag,
+                    'amount' => $method->pivot->amount,
+                ];
+            });
+        });
+
+        return $data;
     }
 }

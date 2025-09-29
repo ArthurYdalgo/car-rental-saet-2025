@@ -3,8 +3,10 @@
 namespace Database\Seeders;
 
 use App\Models\Customer;
+use App\Models\PaymentMethod;
 use App\Models\Rental;
 use App\Models\Vehicle;
+use App\Services\RentalService;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Lottery;
@@ -17,6 +19,7 @@ class RentalSeeder extends Seeder
     public function run(): void
     {
         $customers = Customer::all();
+        $methods = PaymentMethod::all();
 
         for($i = 0; $i < 300; $i++) {
             do {
@@ -37,7 +40,28 @@ class RentalSeeder extends Seeder
 
             $canceled_at = Lottery::odds(1, 100)->choose() ? (clone $start_date)->modify('+'.fake()->numberBetween(0, 2).' days') : null;
 
-            Rental::create(compact('customer_id', 'vehicle_id', 'days', 'vehicle_price_per_day', 'price', 'paid_at', 'start_date', 'end_date', 'canceled_at'));
+            $payment_methods_count = fake()->numberBetween(1, 3);
+            $payment_methods = [];
+
+            $amount_left = $price;
+
+            foreach ($methods->random($payment_methods_count) as $index => $method) {
+                // take incrementally less for each method, so the total is always equal to the price
+                $amount = fake()->randomFloat(2, 1, $amount_left / 2);
+
+                if($index == $payment_methods_count - 1 || $amount > $amount_left) {
+                    $amount = $amount_left;
+                }
+
+                $amount_left -= $amount;
+
+                $payment_methods[] = [
+                    'id' => $method->id,
+                    'amount' => $amount,
+                ];
+            }
+
+            RentalService::updateOrCreate(compact('customer_id', 'vehicle_id', 'days', 'vehicle_price_per_day', 'price', 'paid_at', 'start_date', 'end_date', 'canceled_at', 'payment_methods'));
         }
     }
 }
