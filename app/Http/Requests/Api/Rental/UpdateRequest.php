@@ -19,7 +19,7 @@ class UpdateRequest extends FormRequest
         $start_date = $this->input('start_date', $rental->start_date);
         $end_date = $this->input('end_date', $rental->end_date);
 
-        if($vehicle && !$vehicle->isAvailableBetween($start_date, $end_date, rental_to_ignore: $rental)){
+        if(!$vehicle->isAvailableBetween($start_date, $end_date, rental_to_ignore: $rental)){
             return $this->failedAuthorization('O veículo não está disponível nesse período.');
         }
 
