@@ -63,7 +63,7 @@ export default () => {
                     href: route('reservas'),
                 },
                 {
-                    title: `#${rental.id}`,
+                    title: `#${rental.id} - ${rental.customer.first_name} - ${rental.vehicle.name} (${rental.vehicle.license_plate})`,
                     href: route('reservas.rental', { rental: rental.id }),
                 },
                 {

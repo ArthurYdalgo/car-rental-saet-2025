@@ -60,6 +60,10 @@ class RentalController extends Controller
      */
     public function show(Rental $rental)
     {
+        $rental->loadMissing(['paymentMethods', 'customer', 'vehicle' => function($query){
+            $query->with(['color', 'brand']);
+        }]);
+
         return new RentalResource($rental);
     }
 

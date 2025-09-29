@@ -4,12 +4,41 @@ import MomentDate from '@/components/moment-date';
 import Money from '@/components/money';
 import TextLink from '@/components/text-link';
 import { Button } from '@/components/ui/button';
+import { LoadingButton } from '@/components/ui/loading-button';
 import AppLayout from '@/layouts/app-layout';
 import { Head, Link, nexusProps } from '@laravext/react';
+import axios from 'axios';
 import { useState } from 'react';
+import { toast } from 'sonner';
 
 export default () => {
     const [rental, setRental] = useState(nexusProps().rental);
+    const [processing, setProcessing] = useState(null);
+
+    const refreshRental = () => {
+        axios.get(`/api/rentals/${rental.id}`, { params: { include: 'vehicle,color,brand,customer,payment_methods' } }).then((response) => {
+            setRental(response.data.data);
+        });
+    };
+
+    const handleCancelOrRestore = (rental) => {
+        setProcessing(rental.id);
+
+        axios
+            .put(`/api/rentals/${rental.id}`, {
+                canceled_at: rental.canceled_at ? null : new Date().toISOString(),
+            })
+            .then((response) => {
+                toast.success(`Reserva ${rental.canceled_at ? 'restaurada' : 'cancelada'} com sucesso!`);
+                refreshRental();
+            })
+            .catch((error) => {
+                toast.error(`Erro ao ${rental.canceled_at ? 'restaurar' : 'cancelar'} a reserva.`);
+            })
+            .finally(() => {
+                setProcessing(null);
+            });
+    };
 
     return (
         <AppLayout
@@ -28,6 +57,31 @@ export default () => {
                     <Button size="xs" asChild>
                         <Link href={route('reservas.rental.editar', { rental: rental.id })}>Editar</Link>
                     </Button>
+                    <If condition={!rental.canceled_at}>
+                        <LoadingButton
+                            onClick={() => handleCancelOrRestore(rental)}
+                            loading={rental.id == processing}
+                            variant="destructive"
+                            includeChildrenWhenLoading={false}
+                            className="min-w-20"
+                            size="xs"
+                        >
+                            Cancelar
+                        </LoadingButton>
+                    </If>
+
+                    <If condition={rental.canceled_at}>
+                        <LoadingButton
+                            onClick={() => handleCancelOrRestore(rental)}
+                            loading={rental.id == processing}
+                            variant="orange"
+                            includeChildrenWhenLoading={false}
+                            className="min-w-20"
+                            size="xs"
+                        >
+                            Restaurar
+                        </LoadingButton>
+                    </If>
                 </div>
             }
         >
@@ -101,14 +155,8 @@ export default () => {
                     titleWidth="md:w-48"
                 >
                     {rental.payment_methods.map((payment_method, index) => (
-                        <FormRow cols={12} key={`payment-method-row-${payment_method.id}-${index}`}>
-                            <FormField
-                                span={2}
-                                label={index == 0 ? 'Método de Pagamento' : ''}
-                                insertEmptyLabel={true}
-                                htmlFor="vehicle_id"
-                                required
-                            >
+                        <FormRow cols={4} key={`payment-method-row-${payment_method.id}-${index}`}>
+                            <FormField span={2} label={index == 0 ? 'Método de Pagamento' : ''} insertEmptyLabel={true} htmlFor="vehicle_id" required>
                                 {payment_method.name}
                             </FormField>
 

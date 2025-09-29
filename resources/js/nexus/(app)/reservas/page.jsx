@@ -25,7 +25,7 @@ const breadcrumbs = [
     },
 ];
 
-export default function Dashboard() {
+export default () => {
     const { filters, setFilter } = useFilter({});
     const [processing, setProcessing] = useState(null);
 
