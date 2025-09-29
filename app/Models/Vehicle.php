@@ -82,4 +82,9 @@ class Vehicle extends Model
     {
         return new VehicleService($this);
     }
+
+    public function isAvailableBetween($start_date, $end_date, $rental_to_ignore = null)
+    {
+        return $this->vehicleService()->isVehicleAvailableBetween($start_date, $end_date, rental_to_ignore: $rental_to_ignore);
+    }
 }

@@ -283,6 +283,14 @@ if (!function_exists('isJson')) {
     }
 }
 
+if (!function_exists('failedAuthorizationResponseException')) {
+    function failedAuthorizationResponseException($message = null)
+    {
+        $response = (new Controller)->unauthorizedResponse($message ?? __('Unauthorized'));
+        throw new \Illuminate\Http\Exceptions\HttpResponseException($response);
+    }
+}
+
 if (!function_exists('apiCall')) {
     /**
      * Makes API call to an endpoint.

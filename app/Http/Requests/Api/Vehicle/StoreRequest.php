@@ -3,7 +3,7 @@
 namespace App\Http\Requests\Api\Vehicle;
 
 use App\Services\VehicleService;
-use Illuminate\Foundation\Http\FormRequest;
+use App\Http\Requests\Api\FormRequest;
 use Illuminate\Validation\Rule;
 
 class StoreRequest extends FormRequest

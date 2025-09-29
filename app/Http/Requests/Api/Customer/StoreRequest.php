@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests\Api\Customer;
 
-use Illuminate\Foundation\Http\FormRequest;
+use App\Http\Requests\Api\FormRequest;
 
 class StoreRequest extends FormRequest
 {

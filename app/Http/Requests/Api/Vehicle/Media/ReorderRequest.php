@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests\Api\Vehicle\Media;
 
-use Illuminate\Foundation\Http\FormRequest;
+use App\Http\Requests\Api\FormRequest;
 
 class ReorderRequest extends FormRequest
 {

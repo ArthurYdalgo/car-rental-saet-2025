@@ -40,11 +40,12 @@ class VehicleService
         return $vehicle;
     }
 
-    public function isVehicleAvailableBetween($start_date, $end_date, ?Vehicle $vehicle = null)
+    public function isVehicleAvailableBetween($start_date, $end_date, ?Vehicle $vehicle = null, $rental_to_ignore = null)
     {
         $vehicle ??= $this->vehicle;
 
         return $vehicle->rentalsBetween($start_date, $end_date)
+            ->when($rental_to_ignore, fn($query) => $query->where('id', '!=', is_object($rental_to_ignore) ? $rental_to_ignore->id : $rental_to_ignore))
             ->whereNull('canceled_at')
             ->doesntExist();
     }

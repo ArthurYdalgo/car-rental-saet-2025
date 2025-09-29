@@ -2,15 +2,27 @@
 
 namespace App\Http\Requests\Api\Rental;
 
-use Illuminate\Foundation\Http\FormRequest;
+use App\Models\Vehicle;
+use App\Http\Requests\Api\FormRequest;
 
 class UpdateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      */
-    public function authorize(): bool
+    public function authorize()
     {
+        /** @todo additional validation */
+        $rental = $this->route('rental');
+
+        $vehicle = Vehicle::find($this->input('vehicle_id'));
+        $start_date = $this->input('start_date', $rental->start_date);
+        $end_date = $this->input('end_date', $rental->end_date);
+
+        if(!$vehicle->isAvailableBetween($start_date, $end_date, rental_to_ignore: $rental)){
+            return $this->failedAuthorization('O veículo selecionado não está disponível nesse período.');
+        }
+
         return true;
     }
 

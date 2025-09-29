@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-abstract class Controller
+class Controller
 {
     /**
      * Get a success response
@@ -41,9 +41,6 @@ abstract class Controller
     public function errorResponse($message = null, $exception = null, $errors = null)
     {
         $response = [
-            'code' => 422,
-            'status' => 422,
-            'success' => false,
             'message' => $message ?? 'Erro de validação',
         ];
 
