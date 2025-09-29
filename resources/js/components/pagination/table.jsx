@@ -5,6 +5,7 @@ export default function Table ({
     endpoint,
     params,
     initialPagination = {},
+    resetPageWhenParamsChange = [],
     compactLinks = true,
     tableHead = ({ sortBy, handleClick }) => null,
     tableClassName = "",
@@ -21,6 +22,7 @@ export default function Table ({
                 compactLinks={compactLinks}
                 params={params}
                 sortKeyLimit={sortKeyLimit}
+                resetPageWhenParamsChange={resetPageWhenParamsChange}
                 initialPagination={initialPagination}
                 onPaginationUpdated={onPaginationUpdated}
                 endpoint={endpoint}

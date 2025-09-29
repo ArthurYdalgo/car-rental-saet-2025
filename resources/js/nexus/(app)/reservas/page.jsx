@@ -93,6 +93,7 @@ export default function Dashboard() {
                 ></TableBanner>
                 <Table
                     endpoint={'/api/rentals'}
+                    resetPageWhenParamsChange={['filter']}
                     params={params}
                     tableHead={({ sortBy, handleClick }) => (
                         <TableHeader>
