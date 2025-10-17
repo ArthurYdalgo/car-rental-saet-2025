@@ -50,7 +50,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('media/{media}/display', [MediaController::class, 'display'])->name('media.display');
 
     Route::apiResource('customers', CustomerController::class);
-    Route::apiResource('vehicles', VehicleController::class);
+    Route::apiResource('vehicles', VehicleController::class)->withoutMiddleware(['auth:sanctum']);
     Route::apiResource('rentals', RentalController::class);
 
     Route::get('colors', [ColorController::class, 'index'])->withoutMiddleware(['auth:sanctum']);
