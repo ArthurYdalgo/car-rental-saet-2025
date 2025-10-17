@@ -53,8 +53,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::apiResource('vehicles', VehicleController::class);
     Route::apiResource('rentals', RentalController::class);
 
-    Route::get('colors', [ColorController::class, 'index']);
-    Route::get('brands', [BrandController::class, 'index']);
+    Route::get('colors', [ColorController::class, 'index'])->withoutMiddleware(['auth:sanctum']);
+    Route::get('brands', [BrandController::class, 'index'])->withoutMiddleware(['auth:sanctum']);
     Route::get('payment-methods', [PaymentMethodController::class, 'index']);
 
     Route::get("tools/search-zip-code", SearchZipCodeController::class);
