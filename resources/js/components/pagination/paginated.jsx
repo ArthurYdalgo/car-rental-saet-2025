@@ -10,7 +10,7 @@ import { convertSortingStateToString } from "@/lib/query-builder-tools";
 import Links from "@/components/pagination/links";
 import { useNonInitialEffect } from "@/hooks/use-non-initial-effect";
 import If from "../if";
-import Loading from "../Loading";
+import Loading from "../loading";
 
 export default function Paginated({
     endpoint,
