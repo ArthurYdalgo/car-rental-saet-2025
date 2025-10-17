@@ -35,7 +35,7 @@ class DatabaseSeeder extends Seeder
 
         $this->call([ColorSeeder::class, BrandSeeder::class, PaymentMethodSeeder::class]);
 
-        if(isEnvLocal()){
+        if(isEnvLocal() || true){
             $this->call([VehicleSeeder::class, CustomerSeeder::class, RentalSeeder::class]); 
         }
     }
