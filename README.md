@@ -23,7 +23,7 @@ Recomenda-se rodar os comandos a seguir no diretório do Laravel Herd, que pode 
 Instale-o usando o comando:
 
 ```bash
-laravel new car-rental-app --using=arthurydalgo/car-rental-saet-2025
+laravel new car-rental-app --using=arthurYdalgo/laravext-template
 ```
 
 (Ele pode perguntar "Would you like to run npm install and npm run build?", aperte Enter para aceitar).
@@ -31,7 +31,7 @@ laravel new car-rental-app --using=arthurydalgo/car-rental-saet-2025
 Alternativamente, se quiser usar a versão completa (com todas as funcionalidades implementadas), use:
 
 ```bash
-laravel new car-rental-app --using=arthurydalgo/car-rental-saet-2025:dev-completed
+laravel new car-rental-app --using=arthurYdalgo/laravext-template:dev-completed
 ```
 (Ele pode perguntar "Would you like to run npm install and npm run build?", aperte Enter para aceitar).
 
